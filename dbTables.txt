@@ -1,0 +1,53 @@
+CREATE TABLE Grounds(
+    GroundId int  AUTO_INCREMENT NOT NULL,
+    Name varchar(255) NOT NULL,
+    PRIMARY KEY (GroundId)
+);
+
+
+CREATE TABLE Matches(
+    MatchId int  AUTO_INCREMENT NOT NULL,
+    Title varchar(255) NOT NULL,
+    GroundId int,
+    PRIMARY KEY (MatchId)
+);
+
+CREATE TABLE Teams(
+    TeamID int  AUTO_INCREMENT NOT NULL,
+    TeamName varchar(255) NOT NULL,
+    CompanyName varchar(255) NOT NULL,
+    Rank int,
+    PRIMARY KEY (TeamID)
+);
+
+CREATE TABLE Players(
+    PlayerID int  AUTO_INCREMENT NOT NULL,
+    TeamID int NOT NULL,
+    Name varchar(255) NOT NULL,
+    Age int,
+    PRIMARY KEY (PlayerID)
+);
+
+CREATE TABLE PlayerScores(
+    MatchID int NOT NULL,
+    TeamID int NOT NULL,
+    PlayerID int NOT NULL,
+    Runs int,
+    Wickets int,
+    PRIMARY KEY (MatchID, TeamID)
+);
+
+CREATE TABLE MatchScores(
+    MatchID int NOT NULL,
+    TeamID int NOT NULL,
+    OversPerBall int,
+    TotalOvers int,
+    TotalRuns int,
+    TotalExtras int,
+    TotalWickets int,
+    Overs Float,
+    PRIMARY KEY (MatchID, TeamID)
+);
+
+
+
