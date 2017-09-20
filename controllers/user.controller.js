@@ -16,15 +16,16 @@ controller.getAllUsers = function () {
 
   return def.promise;
 };
-controller.addUser = function (args) {
+controller.addUser = function (req) {
   const def = Q.defer();
 //   let users = [{'name':'rid'},{'name':'shaki'}];
 //   def.resolve(users);
-  let age = args.age;
-  let name = args.name;
-  let address = args.address;
-
-  userService.addUsers(name,address,age).then((result) => { 
+let args ={
+  age:req.age,
+  name:req.name,
+  address:req.address
+}
+  userService.addUsers(args).then((result) => { 
     def.resolve(result);
   })
     .catch((error) => {

@@ -11,7 +11,7 @@ Basic Structure ,
 * util--> holds the common services ( ex - database connection service which is help to connect database with project.)
 
 How to add a new Api for accessing a new Table
-* create a route file inside the routes/api/ folder (__.routes.js).
+* create a route file inside the routes/api/ folder (__.routes.js).Then import that router file to api.routes.js
 * Then create the controller for handles that routes in controllers/ folder (__.controller.js)
 * Next create the service for accessing the database (add the relevent queries) in services/ folder (__.service.js) 
 
