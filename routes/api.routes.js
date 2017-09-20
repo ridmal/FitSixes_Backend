@@ -4,9 +4,11 @@ const router = express.Router();
 const user = require('./api/users.routes');
 const team = require('./api/teams.routes');
 const player = require('./api/players.routes');
+const bowling = require('./api/bollowing.routes');
 
 router.use('/user', user);
 router.use('/team',team);
 router.use('/player',player);
+router.use('/bowler',bowling);
 
 module.exports = router;
