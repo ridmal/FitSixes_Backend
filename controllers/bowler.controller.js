@@ -44,4 +44,39 @@ controller.getAllWicketsById = function (req) {
     return def.promise;
 };
 
+controller.addNewBall = function (req) {
+    const def = Q.defer();
+    let args = {
+        teamId:req.teamId,
+        matchId:req.matchId,
+        bowlerId:req.bowlerId,
+        runs:req.runs,
+        extras:req.extras,
+        ballStatus:req.ballStatus,
+        noBall:req.noBall,
+        wide:req.wide,
+        wicket:req.wicket
+    };
+
+    bowlerService.addNewBall(args).then((result) => {
+        def.resolve(result);
+    })
+        .catch((error) => {
+            def.reject(error);
+        });
+
+    return def.promise;
+};
+
+controller.getSummaryByMatchId = function (req) {
+    const def = Q.defer();
+    bowlerService.getSummaryByMatchId(req.params.id).then((result) => {
+        def.resolve(result);
+    })
+        .catch((error) => {
+            def.reject(error);
+        });
+    return def.promise;
+};
+
 module.exports = controller;

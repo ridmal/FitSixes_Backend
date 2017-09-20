@@ -36,6 +36,25 @@ router.get('/getHighestWicketsById/:id',function(req,res){
     );
 });
 
+router.get('/getSummaryByMatchId/:id',function(req,res){
+    bowler.getSummaryByMatchId(req).then(function(result){
+        res.send(result);
+    }).catch(
+        function(error){
+            res.send(error);
+        }
+    );
+});
+
+router.post('/addNewBall',function(req,res){ // add a tplayer for perticular team.
+    bowler.addNewBall(req.body).then(function(result){
+        res.send(result);
+    }).catch(
+        function(error){
+            res.send(error);
+        }
+    );
+});
 
 
 module.exports = router;
