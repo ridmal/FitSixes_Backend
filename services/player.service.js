@@ -4,9 +4,9 @@ const databaseService = require('../utils/database.service');
 const service = {};
 // table --> user 
 
-service.getAllUsers = function () { // get all users
+service.getPlayers= function (args) { // get players for perticular team
   const def = Q.defer();
-  const query = `SELECT * FROM players`;
+  const query = `SELECT * FROM players WHERE TeamID = ${args.teamId}`;
   databaseService.selectQuery(query)
     .then((results) => {
     //   if (results.length !== 0) {
@@ -20,9 +20,9 @@ service.getAllUsers = function () { // get all users
 
   return def.promise;
 };
-service.addUsers = function (args) { // add users
+service.addPlayer = function (args) { // add player 
   const def = Q.defer();
-  const query = `INSERT INTO users (name, address,age) VALUES ('${args.name}', '${args.address}','${args.age}')`;
+  const query = `INSERT INTO players (TeamID,Name,Age) VALUES ('${args.teamId}', '${args.name}','${args.age}')`;
   databaseService.addQuery(query)
     .then((results) => {
        def.resolve(results);

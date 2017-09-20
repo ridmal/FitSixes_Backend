@@ -1,11 +1,14 @@
 const Q = require('q');
-const teamService = require('../services/team.service');
+const playerService = require('../services/player.service');
 
 const controller = {};
 
-controller.getAllTeams = function () {
+controller.getPlayers = function (req) {
   const def = Q.defer();
-  teamService.getAllTeams().then((result) => { 
+  let args = {
+      teamId : req.teamId
+  }
+  playerService.getPlayers(args).then((result) => { 
     def.resolve(result);
   })
     .catch((error) => {
@@ -14,15 +17,15 @@ controller.getAllTeams = function () {
 
   return def.promise;
 };
-controller.addTeam = function (req) {
+controller.addPlayer = function (req) {
   const def = Q.defer();
   let args = {
-   tname :req.teamName,
-   cname :req.companyName,
-   rank :0
+    teamId:req.teamId,
+    name:req.name,
+    age:req.age
   }
 
-  teamService.addTeam(args).then((result) => { 
+  playerService.addPlayer(args).then((result) => { 
     def.resolve(result);
   })
     .catch((error) => {
