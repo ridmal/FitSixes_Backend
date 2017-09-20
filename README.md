@@ -15,5 +15,8 @@ How to add a new Api for accessing a new Table
 * Then create the controller for handles that routes in controllers/ folder (__.controller.js)
 * Next create the service for accessing the database (add the relevent queries) in services/ folder (__.service.js) 
 
-Basic Tables structure in mySql database is in dbTables.txt file.
-(Please send your pull request to the dev branch)
+* Create a mysql database --> 'fitsixes'.
+* And run query mentioned in following document.
+(Basic Tables structure in mySql database is in dbTables.txt file.)
+
+* Please send your pull request to the dev branch
