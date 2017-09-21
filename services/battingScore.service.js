@@ -5,7 +5,7 @@ const service = {};
 
 service.addScore = function (args) { // add score
   const def = Q.defer();
-  const query = `INSERT INTO battingscore (teamId,matchId,playerId,runs,inningId) VALUES (${args.teamId},${args.matchId},${args.playerId},${args.runs},${args.inningId})`;
+  const query = `INSERT INTO battingscore (teamId,matchId,playerId,runs,inningId,six,four,dot) VALUES (${args.teamId},${args.matchId},${args.playerId},${args.runs},${args.inningId},${args.six},${args.four},${args.dot})`;
   databaseService.addQuery(query)
     .then((results) => {
        def.resolve(results);
