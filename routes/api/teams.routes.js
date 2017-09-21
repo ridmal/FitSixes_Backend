@@ -24,7 +24,7 @@ router.post('/addTeam',function(req,res){ // add a team
 
 router.post('/removeTeam',function(req,res){ // add a team
   teamController.removeTeam(req.body.teamId).then(function(result){
-    res.send("Successfully removed");
+    res.send(result);
   }).catch(
     function(error){
       res.send(error);
