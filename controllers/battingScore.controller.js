@@ -10,7 +10,10 @@ controller.addScore = function (req) {
     matchId:req.matchId,
     playerId:req.playerId,
     runs:req.runs,
-    inningId:req.inningId
+    inningId:req.inningId,
+    isSix: req.isSix,
+    isFour: req.isFour,
+    isDot: req.isDot
   }
 
   battingScoreService.addScore(args).then((result) => { 

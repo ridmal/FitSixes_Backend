@@ -4,7 +4,6 @@ const router = express.Router();
 const user = require('./api/users.routes');
 const team = require('./api/teams.routes');
 const player = require('./api/players.routes');
-
 const battingScore = require('./api/battingScore.routes');
 const bowling = require('./api/bollowing.routes');
 const match = require('./api/matches.routes');
