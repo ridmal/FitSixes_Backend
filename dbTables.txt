@@ -1,59 +1,240 @@
-CREATE TABLE `grounds` (
-  `GroundId` int(11) NOT NULL,
-  `Name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
+-- -----------------------------------------------------
+-- Schema fitsixes
+-- -----------------------------------------------------
+DROP SCHEMA IF EXISTS `fitsixes` ;
+
+-- -----------------------------------------------------
+-- Schema fitsixes
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `fitsixes` DEFAULT CHARACTER SET latin1 ;
+USE `fitsixes` ;
+
+-- -----------------------------------------------------
+-- Table `fitsixes`.`grounds`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `fitsixes`.`grounds` ;
+
+CREATE TABLE IF NOT EXISTS `fitsixes`.`grounds` (
+  `groundId` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`groundId`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
 
 
-INSERT INTO `grounds` (`GroundId`, `Name`) VALUES
-(1, 'A'),
-(2, 'B'),
-(3, 'C'),
-(4, 'D');
+-- -----------------------------------------------------
+-- Table `fitsixes`.`matches`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `fitsixes`.`matches` ;
+
+CREATE TABLE IF NOT EXISTS `fitsixes`.`matches` (
+  `matchId` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL,
+  `groundId` INT(11) NULL,
+  `overs` INT NULL,
+  `balls` VARCHAR(45) NULL,
+  `team1Id` INT NULL,
+  `team2Id` INT NULL,
+  `roundId` INT NULL,
+  `isLive` TINYINT(1) NULL DEFAULT 0,
+  `inningId` INT NULL,
+  `battingTeamId` INT NULL,
+  `currentOvers` FLOAT NULL,
+  `score` INT NULL,
+  `target` INT NULL,
+  PRIMARY KEY (`matchId`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
 
 
-CREATE TABLE Matches(
-    MatchId int  AUTO_INCREMENT NOT NULL,
-    Title varchar(255) NOT NULL,
-    GroundId int,
-    PRIMARY KEY (MatchId)
-);
+-- -----------------------------------------------------
+-- Table `fitsixes`.`players`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `fitsixes`.`players` ;
 
-CREATE TABLE Teams(
-    TeamID int  AUTO_INCREMENT NOT NULL,
-    TeamName varchar(255) NOT NULL,
-    CompanyName varchar(255) NOT NULL,
-    Rank int,
-    PRIMARY KEY (TeamID)
-);
-
-CREATE TABLE Players(
-    PlayerID int  AUTO_INCREMENT NOT NULL,
-    TeamID int NOT NULL,
-    Name varchar(255) NOT NULL,
-    Age int,
-    PRIMARY KEY (PlayerID)
-);
-
-CREATE TABLE PlayerScores(
-    MatchID int NOT NULL,
-    TeamID int NOT NULL,
-    PlayerID int NOT NULL,
-    Runs int,
-    Wickets int,
-    PRIMARY KEY (MatchID, TeamID)
-);
-
-CREATE TABLE MatchScores(
-    MatchID int NOT NULL,
-    TeamID int NOT NULL,
-    OversPerBall int,
-    TotalOvers int,
-    TotalRuns int,
-    TotalExtras int,
-    TotalWickets int,
-    Overs Float,
-    PRIMARY KEY (MatchID, TeamID)
-);
+CREATE TABLE IF NOT EXISTS `fitsixes`.`players` (
+  `playerId` INT(11) NOT NULL AUTO_INCREMENT,
+  `teamId` INT(11) NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `age` INT(11) NULL,
+  PRIMARY KEY (`playerId`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
 
 
+-- -----------------------------------------------------
+-- Table `fitsixes`.`teams`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `fitsixes`.`teams` ;
+
+CREATE TABLE IF NOT EXISTS `fitsixes`.`teams` (
+  `teamId` INT(11) NOT NULL AUTO_INCREMENT,
+  `teamName` VARCHAR(255) NOT NULL,
+  `companyName` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`teamId`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `fitsixes`.`battingScore`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `fitsixes`.`battingScore` ;
+
+CREATE TABLE IF NOT EXISTS `fitsixes`.`battingScore` (
+  `ballId` INT NOT NULL AUTO_INCREMENT,
+  `teamId` INT NULL,
+  `matchId` INT NOT NULL,
+  `playerId` INT NULL,
+  `runs` INT NULL,
+  `inningId` INT NULL,
+  `six` TINYINT(1) NULL,
+  `four` TINYINT(1) NULL,
+  `dot` TINYINT(1) NULL,
+  PRIMARY KEY (`ballId`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `fitsixes`.`bowlingScore`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `fitsixes`.`bowlingScore` ;
+
+CREATE TABLE IF NOT EXISTS `fitsixes`.`bowlingScore` (
+  `ballId` INT NOT NULL AUTO_INCREMENT,
+  `teamId` INT NULL,
+  `matchId` INT NULL,
+  `bowlerId` INT NULL,
+  `runs` INT NULL,
+  `extras` INT NULL,
+  `ballStatus` INT NULL,
+  `noBall` TINYINT(1) NULL,
+  `wide` TINYINT(1) NULL,
+  `wicket` TINYINT(1) NULL,
+  PRIMARY KEY (`ballId`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `fitsixes`.`ballStatus`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `fitsixes`.`ballStatus` ;
+
+CREATE TABLE IF NOT EXISTS `fitsixes`.`ballStatus` (
+  `id` INT NOT NULL,
+  `name` VARCHAR(45) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `fitsixes`.`inning`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `fitsixes`.`inning` ;
+
+CREATE TABLE IF NOT EXISTS `fitsixes`.`inning` (
+  `id` INT NOT NULL,
+  `name` VARCHAR(45) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `fitsixes`.`rounds`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `fitsixes`.`rounds` ;
+
+CREATE TABLE IF NOT EXISTS `fitsixes`.`rounds` (
+  `roundId` INT NOT NULL,
+  `name` VARCHAR(45) NULL,
+  PRIMARY KEY (`roundId`))
+ENGINE = InnoDB;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+-- -----------------------------------------------------
+-- Data for table `fitsixes`.`grounds`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `fitsixes`;
+INSERT INTO `fitsixes`.`grounds` (`groundId`, `name`) VALUES (1, 'A');
+INSERT INTO `fitsixes`.`grounds` (`groundId`, `name`) VALUES (2, 'B');
+INSERT INTO `fitsixes`.`grounds` (`groundId`, `name`) VALUES (3, 'C');
+INSERT INTO `fitsixes`.`grounds` (`groundId`, `name`) VALUES (4, 'D');
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `fitsixes`.`players`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `fitsixes`;
+INSERT INTO `fitsixes`.`players` (`playerId`, `teamId`, `name`, `age`) VALUES (1, 1, 'Nimesha', 20);
+INSERT INTO `fitsixes`.`players` (`playerId`, `teamId`, `name`, `age`) VALUES (2, 1, 'Ridmal', 20);
+INSERT INTO `fitsixes`.`players` (`playerId`, `teamId`, `name`, `age`) VALUES (3, 1, 'Achira', 20);
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `fitsixes`.`teams`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `fitsixes`;
+INSERT INTO `fitsixes`.`teams` (`teamId`, `teamName`, `companyName`) VALUES (1, 'Vertusa Team 1', 'Vertusa');
+INSERT INTO `fitsixes`.`teams` (`teamId`, `teamName`, `companyName`) VALUES (2, 'Vertusa Team 2', 'Vertusa');
+INSERT INTO `fitsixes`.`teams` (`teamId`, `teamName`, `companyName`) VALUES (3, 'Arimac Team', 'Arimac');
+INSERT INTO `fitsixes`.`teams` (`teamId`, `teamName`, `companyName`) VALUES (4, '99X Team', '99X');
+INSERT INTO `fitsixes`.`teams` (`teamId`, `teamName`, `companyName`) VALUES (5, 'Creative Team', 'Creative Solutions');
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `fitsixes`.`bowlingScore`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `fitsixes`;
+INSERT INTO `fitsixes`.`bowlingScore` (`ballId`, `teamId`, `matchId`, `bowlerId`, `runs`, `extras`, `ballStatus`, `noBall`, `wide`, `wicket`) VALUES (1, 1, 1, 1, 2, 0, 1, NULL, NULL, NULL);
+INSERT INTO `fitsixes`.`bowlingScore` (`ballId`, `teamId`, `matchId`, `bowlerId`, `runs`, `extras`, `ballStatus`, `noBall`, `wide`, `wicket`) VALUES (2, 1, 1, 1, 4, 0, 1, NULL, NULL, NULL);
+INSERT INTO `fitsixes`.`bowlingScore` (`ballId`, `teamId`, `matchId`, `bowlerId`, `runs`, `extras`, `ballStatus`, `noBall`, `wide`, `wicket`) VALUES (3, 1, 1, 1, 6, 0, 1, NULL, NULL, NULL);
+INSERT INTO `fitsixes`.`bowlingScore` (`ballId`, `teamId`, `matchId`, `bowlerId`, `runs`, `extras`, `ballStatus`, `noBall`, `wide`, `wicket`) VALUES (4, 1, 1, 1, 5, 1, 2, NULL, NULL, NULL);
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `fitsixes`.`ballStatus`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `fitsixes`;
+INSERT INTO `fitsixes`.`ballStatus` (`id`, `name`) VALUES (1, 'Valid');
+INSERT INTO `fitsixes`.`ballStatus` (`id`, `name`) VALUES (2, 'Leg Bye');
+INSERT INTO `fitsixes`.`ballStatus` (`id`, `name`) VALUES (3, 'Bye');
+INSERT INTO `fitsixes`.`ballStatus` (`id`, `name`) VALUES (4, 'Run out');
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `fitsixes`.`rounds`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `fitsixes`;
+INSERT INTO `fitsixes`.`rounds` (`roundId`, `name`) VALUES (1, 'Round 1');
+INSERT INTO `fitsixes`.`rounds` (`roundId`, `name`) VALUES (2, 'Round 2');
+INSERT INTO `fitsixes`.`rounds` (`roundId`, `name`) VALUES (3, 'Round 3');
+INSERT INTO `fitsixes`.`rounds` (`roundId`, `name`) VALUES (4, 'Round 4');
+
+COMMIT;
 
