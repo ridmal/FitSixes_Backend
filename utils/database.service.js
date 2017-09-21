@@ -10,10 +10,12 @@ var con = mysql.createConnection({
   port:"3306",
   ssl : true
 });
-
-con.connect(function(err) {
+if(!con){
+  con.connect(function(err) {
   if (err) throw err;
 });
+}
+
 // service.createTable = function(name){
 //     con.query('CREATE TABLE '+name+' (name VARCHAR(255), address VARCHAR(255))',function(err,result){
 //          if (err) throw err;
