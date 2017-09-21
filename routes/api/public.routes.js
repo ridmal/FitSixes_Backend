@@ -30,7 +30,7 @@ router.get('/getTeams',function(req,res){ // get all teams
 
   	for (var i = 0, len = result.length; i < len; i++) {
 
-	      if((i==0)&& (teamId_temp!=result[i].teamId)){
+	      if((i==0)&& (teamId_temp!=result[i].teamId)){ 
 	      		team = new Object();
 	            playes_array = new Array();
 	  			team.teamId=result[i].teamId;
