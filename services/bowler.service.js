@@ -55,7 +55,7 @@ service.getAllWicketsById = function (id){
 
 service.addNewBall = function (args) { // add player
     const def = Q.defer();
-    const query = `INSERT INTO bowlingscore (teamId, matchId, bowlerId, runs, extras, ballStatus,noBall,wide,wicket) VALUES ( '${args.teamId}','${args.matchId}','${args.bowlerId}','${args.runs}','${args.extras}','${args.ballStatus}','${args.noBall}','${args.wide}','${args.wicket}')`;
+    const query = `INSERT INTO bowlingscore (teamId, matchId, bowlerId, runs, extras, currentBall , isValidBall,isNoBall,isWide,isWicket) VALUES ( '${args.teamId}','${args.matchId}','${args.bowlerId}','${args.runs}','${args.extras}' ,'${args.currentBall}','${args.isValidBall}','${args.isNoBall}','${args.isWide}','${args.isWicket}')`;
     databaseService.addQuery(query)
         .then((results) => {
             def.resolve(results);
@@ -69,7 +69,7 @@ service.addNewBall = function (args) { // add player
 
 service.getSummaryByMatchId = function (id){
     const def = Q.defer();
-    const query = `SELECT p.name, SUM(b.runs) AS runs, SUM(b.extras) AS extras, SUM(b.noBall) AS noBall, SUM(b.wide) AS wide, SUM(b.wicket) AS wickets FROM bowlingscore b, players p WHERE matchId = ${id} AND b.bowlerId = p.playerId GROUP BY p.name`;
+    const query = `SELECT p.name, SUM(b.runs) AS runs, SUM(b.extras) AS extras, SUM(b.isNoBall) AS noBall, SUM(b.isWide) AS wide, SUM(b.isWicket) AS wickets, MAX(b.currentBall) AS overs, (SUM(b.runs) / SUM(b.isValidBall)) AS eco FROM bowlingscore b, players p WHERE matchId = ${id} AND b.bowlerId = p.playerId GROUP BY p.playerId`;
     databaseService.selectQuery(query)
         .then((results) => {
             def.resolve(results);

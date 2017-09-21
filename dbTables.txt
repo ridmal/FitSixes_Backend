@@ -113,23 +113,12 @@ CREATE TABLE IF NOT EXISTS `fitsixes`.`bowlingScore` (
   `bowlerId` INT NULL,
   `runs` INT NULL,
   `extras` INT NULL,
-  `ballStatus` INT NULL,
-  `noBall` TINYINT(1) NULL,
-  `wide` TINYINT(1) NULL,
-  `wicket` TINYINT(1) NULL,
+  `currentBall` FLOAT NULL,
+  `isValidBall` TINYINT(1) NULL DEFAULT 0,
+  `isNoBall` TINYINT(1) NULL DEFAULT 0,
+  `isWide` TINYINT(1) NULL DEFAULT 0,
+  `isWicket` TINYINT(1) NULL DEFAULT 0,
   PRIMARY KEY (`ballId`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `fitsixes`.`ballStatus`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `fitsixes`.`ballStatus` ;
-
-CREATE TABLE IF NOT EXISTS `fitsixes`.`ballStatus` (
-  `id` INT NOT NULL,
-  `name` VARCHAR(45) NULL,
-  PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
 
@@ -205,23 +194,15 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `fitsixes`;
-INSERT INTO `fitsixes`.`bowlingScore` (`ballId`, `teamId`, `matchId`, `bowlerId`, `runs`, `extras`, `ballStatus`, `noBall`, `wide`, `wicket`) VALUES (1, 1, 1, 1, 2, 0, 1, NULL, NULL, NULL);
-INSERT INTO `fitsixes`.`bowlingScore` (`ballId`, `teamId`, `matchId`, `bowlerId`, `runs`, `extras`, `ballStatus`, `noBall`, `wide`, `wicket`) VALUES (2, 1, 1, 1, 4, 0, 1, NULL, NULL, NULL);
-INSERT INTO `fitsixes`.`bowlingScore` (`ballId`, `teamId`, `matchId`, `bowlerId`, `runs`, `extras`, `ballStatus`, `noBall`, `wide`, `wicket`) VALUES (3, 1, 1, 1, 6, 0, 1, NULL, NULL, NULL);
-INSERT INTO `fitsixes`.`bowlingScore` (`ballId`, `teamId`, `matchId`, `bowlerId`, `runs`, `extras`, `ballStatus`, `noBall`, `wide`, `wicket`) VALUES (4, 1, 1, 1, 5, 1, 2, NULL, NULL, NULL);
-
-COMMIT;
-
-
--- -----------------------------------------------------
--- Data for table `fitsixes`.`ballStatus`
--- -----------------------------------------------------
-START TRANSACTION;
-USE `fitsixes`;
-INSERT INTO `fitsixes`.`ballStatus` (`id`, `name`) VALUES (1, 'Valid');
-INSERT INTO `fitsixes`.`ballStatus` (`id`, `name`) VALUES (2, 'Leg Bye');
-INSERT INTO `fitsixes`.`ballStatus` (`id`, `name`) VALUES (3, 'Bye');
-INSERT INTO `fitsixes`.`ballStatus` (`id`, `name`) VALUES (4, 'Run out');
+INSERT INTO `fitsixes`.`bowlingScore` (`ballId`, `teamId`, `matchId`, `bowlerId`, `runs`, `extras`, `currentBall`, `isValidBall`, `isNoBall`, `isWide`, `isWicket`) VALUES (1, 1, 1, 1, 2, 0, 0.1, 1, 0, 0, 0);
+INSERT INTO `fitsixes`.`bowlingScore` (`ballId`, `teamId`, `matchId`, `bowlerId`, `runs`, `extras`, `currentBall`, `isValidBall`, `isNoBall`, `isWide`, `isWicket`) VALUES (2, 1, 1, 1, 5, 1, 0.2, 0, 1, 0, 0);
+INSERT INTO `fitsixes`.`bowlingScore` (`ballId`, `teamId`, `matchId`, `bowlerId`, `runs`, `extras`, `currentBall`, `isValidBall`, `isNoBall`, `isWide`, `isWicket`) VALUES (3, 1, 1, 1, 6, 0, 0.2, 1, 0, 0, 0);
+INSERT INTO `fitsixes`.`bowlingScore` (`ballId`, `teamId`, `matchId`, `bowlerId`, `runs`, `extras`, `currentBall`, `isValidBall`, `isNoBall`, `isWide`, `isWicket`) VALUES (4, 1, 1, 1, 0, 0, 0.3, 1, 0, 0, 1);
+INSERT INTO `fitsixes`.`bowlingScore` (`ballId`, `teamId`, `matchId`, `bowlerId`, `runs`, `extras`, `currentBall`, `isValidBall`, `isNoBall`, `isWide`, `isWicket`) VALUES (5, 1, 1, 1, 4, 0, 0.4, 1, 0, 0, 0);
+INSERT INTO `fitsixes`.`bowlingScore` (`ballId`, `teamId`, `matchId`, `bowlerId`, `runs`, `extras`, `currentBall`, `isValidBall`, `isNoBall`, `isWide`, `isWicket`) VALUES (6, 1, 1, 1, 0, 0, 0.5, 1, 0, 0, 1);
+INSERT INTO `fitsixes`.`bowlingScore` (`ballId`, `teamId`, `matchId`, `bowlerId`, `runs`, `extras`, `currentBall`, `isValidBall`, `isNoBall`, `isWide`, `isWicket`) VALUES (7, 1, 1, 1, 2, 0, 1, 1, 0, 0, 0);
+INSERT INTO `fitsixes`.`bowlingScore` (`ballId`, `teamId`, `matchId`, `bowlerId`, `runs`, `extras`, `currentBall`, `isValidBall`, `isNoBall`, `isWide`, `isWicket`) VALUES (8, 1, 1, 2, 5, 1, 0.1, 0, 1, 0, 0);
+INSERT INTO `fitsixes`.`bowlingScore` (`ballId`, `teamId`, `matchId`, `bowlerId`, `runs`, `extras`, `currentBall`, `isValidBall`, `isNoBall`, `isWide`, `isWicket`) VALUES (9, 1, 1, 2, 0, 0, 0.1, 1, 0, 0, 1);
 
 COMMIT;
 

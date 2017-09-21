@@ -52,10 +52,11 @@ controller.addNewBall = function (req) {
         bowlerId:req.bowlerId,
         runs:req.runs,
         extras:req.extras,
-        ballStatus:req.ballStatus,
-        noBall:req.noBall,
-        wide:req.wide,
-        wicket:req.wicket
+        currentBall:req.currentBall,
+        isValidBall:req.isValidBall,
+        isNoBall:req.isNoBall,
+        isWide:req.isWide,
+        isWicket:req.isWicket
     };
 
     bowlerService.addNewBall(args).then((result) => {
