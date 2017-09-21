@@ -48,7 +48,20 @@ controller.addMatch = function (req) {
 
   return def.promise;
 };
+controller.getMatchDetails = function (req) {
+  const def = Q.defer();
+  let args = {
+    matchId:req.matchId
+  }
 
+  matchService.getMatchDetails(args).then((result) => { 
+    def.resolve(result);
+  })
+    .catch((error) => {
+      def.reject(error);
+    });
 
+  return def.promise;
+};
 
 module.exports = controller;

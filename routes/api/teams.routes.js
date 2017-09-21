@@ -11,6 +11,7 @@ router.get('/getAllTeams',function(req,res){ // get all teams
     }
   );
 });
+
 router.post('/addTeam',function(req,res){ // add a team
   teamController.addTeam(req.body).then(function(result){
     res.send(result);
@@ -20,5 +21,18 @@ router.post('/addTeam',function(req,res){ // add a team
     }
   );
 });
+
+router.post('/removeTeam',function(req,res){ // add a team
+  teamController.removeTeam(req.body.teamId).then(function(result){
+    res.send("Successfully removed");
+  }).catch(
+    function(error){
+      res.send(error);
+    }
+  );
+});
+
+
+
 
 module.exports = router;

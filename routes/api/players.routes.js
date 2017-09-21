@@ -11,8 +11,8 @@ router.post('/getPlayers',function(req,res){ // get players for each team.
     }
   );
 });
-router.post('/addPlayer',function(req,res){ // add a tplayer for perticular team.
- playerController.addPlayer(req.body).then(function(result){
+router.post('/addPlayers',function(req,res){ // add a tplayer for perticular team.
+ playerController.addPlayers(req.body).then(function(result){
     res.send(result);
   }).catch(
     function(error){
