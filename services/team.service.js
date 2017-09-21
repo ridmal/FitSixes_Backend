@@ -21,7 +21,7 @@ service.getAllTeams= function () { // get all Teams
 
 service.addTeam = function (args) { // add team
   const def = Q.defer();
-  const query = `INSERT INTO teams (TeamName, CompanyName,Rank) VALUES ('${args.tname}', '${args.cname}','${args.rank}')`;
+  const query = `INSERT INTO teams (TeamName, CompanyName) VALUES ('${args.tname}', '${args.cname}')`;
 
   
   databaseService.addQuery(query)
@@ -40,9 +40,9 @@ service.removeTeam = function (teamId) { // add team
   const query1 = `DELETE FROM teams WHERE teamId=`+ teamId;
 
   
-  databaseService.addQuery(query1)
+  databaseService.deleteQuery(query1)
     .then((results) => {
-       def.resolve("Successfull removed");
+       def.resolve(results);
           })
     .catch((error) => {
       def.reject(error);
@@ -52,9 +52,9 @@ service.removeTeam = function (teamId) { // add team
   const query2 = `DELETE FROM players WHERE teamId=`+ teamId;
 
   
-  databaseService.addQuery(query2)
+  databaseService.deleteQuery(query2)
     .then((results) => {
-       def.resolve("Successfull removed");
+       def.resolve(results);
           })
     .catch((error) => {
       def.reject(error);

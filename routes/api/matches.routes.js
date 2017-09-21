@@ -36,6 +36,18 @@ router.post('/addMatch',function(req,res){ // add a tplayer for perticular team.
   );
 });
 
+
+router.post('/removeMatch',function(req,res){ // add a tplayer for perticular team.
+ matchController.removeMatch(req.body.matchId).then(function(result){
+    res.send(result);
+  }).catch(
+    function(error){
+      res.send(error);
+    }
+  );
+});
+
+
 router.post('/getMatchDetails',function(req,res){ // add a tplayer for perticular team.
  matchController.getMatchDetails(req.body).then(function(result){
     res.send(result);
@@ -45,4 +57,6 @@ router.post('/getMatchDetails',function(req,res){ // add a tplayer for perticula
     }
   );
 });
+
+
 module.exports = router;
