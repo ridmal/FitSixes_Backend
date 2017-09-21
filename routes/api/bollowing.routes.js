@@ -8,7 +8,7 @@ var bowler = require('../../controllers/bowler.controller');
 
 router.get('/getAllBowlers',function(req,res){
     bowler.getBowlers(req.body).then(function(result){
-        res.send(result);
+        res.json(result);
     }).catch(
         function(error){
             res.send(error);
@@ -18,7 +18,7 @@ router.get('/getAllBowlers',function(req,res){
 
 router.get('/getBowlerById/:id',function(req,res){
     bowler.getBowlerById(req).then(function(result){
-        res.send(result);
+        res.json(result);
     }).catch(
         function(error){
             res.send(error);
@@ -26,7 +26,7 @@ router.get('/getBowlerById/:id',function(req,res){
     );
 });
 
-router.get('/getHighestWicketsById/:id',function(req,res){
+/*router.get('/getHighestWicketsById/:id',function(req,res){
     bowler.getAllWicketsById(req).then(function(result){
         res.send(result);
     }).catch(
@@ -34,7 +34,7 @@ router.get('/getHighestWicketsById/:id',function(req,res){
             res.send(error);
         }
     );
-});
+});*/
 
 router.get('/getSummaryByMatchId/:id',function(req,res){
     bowler.getSummaryByMatchId(req).then(function(result){

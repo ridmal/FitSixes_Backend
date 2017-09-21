@@ -33,7 +33,7 @@ controller.getBowlerById = function (req) {
 };
 
 
-controller.getAllWicketsById = function (req) {
+/*controller.getAllWicketsById = function (req) {
     const def = Q.defer();
     bowlerService.getAllWicketsById(req.params.id).then((result) => {
         def.resolve(result);
@@ -42,7 +42,7 @@ controller.getAllWicketsById = function (req) {
         def.reject(error);
 });
     return def.promise;
-};
+};*/
 
 controller.addNewBall = function (req) {
     const def = Q.defer();

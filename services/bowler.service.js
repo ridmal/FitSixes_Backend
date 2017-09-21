@@ -5,16 +5,12 @@ const Q = require('q');
 const databaseService = require('../utils/database.service');
 
 const service = {};
-// table --> user
 
 service.getAllBowlers= function () { // get all Teams
     const def = Q.defer();
-    const query = 'SELECT * FROM `bowlingscore`';
+    const query = 'SELECT p.name, t.teamName, t.companyName, SUM(b.runs) AS runs, SUM(b.extras) AS extras, SUM(b.isValidBall) AS validBalls, SUM(b.isNoBall) AS noBalls, SUM(b.isWide) AS wideBalls, SUM(b.isWicket) AS wickets FROM bowlingscore b, players p, teams t WHERE b.bowlerId = p.playerId AND p.teamId = t.teamId GROUP BY p.playerId';
     databaseService.selectQuery(query)
         .then((results) => {
-        //   if (results.length !== 0) {
-        //       deferred.resolve(results);
-        //         }
         def.resolve(results);
 })
     .catch((error) => {
@@ -27,7 +23,7 @@ service.getAllBowlers= function () { // get all Teams
 service.getBowlerById = function (id){
 
     const def = Q.defer();
-    const query = `SELECT * FROM bowlingscore WHERE bowlerId = ${id}`;
+    const query = `SELECT p.name, t.teamName, t.companyName, SUM(b.runs) AS runs, SUM(b.extras) AS extras, SUM(b.isValidBall) AS validBalls, SUM(b.isNoBall) AS noBalls, SUM(b.isWide) AS wideBalls, SUM(b.isWicket) AS wickets FROM bowlingscore b, players p, teams t WHERE b.bowlerId = ${id} AND b.bowlerId = p.playerId AND p.teamId = t.teamId GROUP BY p.playerId`;
     databaseService.selectQuery(query)
         .then((results) => {
         def.resolve(results);
@@ -40,7 +36,7 @@ service.getBowlerById = function (id){
 
 };
 
-service.getAllWicketsById = function (id){
+/*service.getAllWicketsById = function (id){
     const def = Q.defer();
     const query = `SELECT b.teamId, p.name, p.playerId, SUM(wicket) AS wickets FROM bowlingscore b, players p WHERE bowlerId = ${id} AND b.bowlerId = p.playerId`;
     databaseService.selectQuery(query)
@@ -51,7 +47,7 @@ service.getAllWicketsById = function (id){
         def.reject(error);
 });
     return def.promise;
-};
+};*/
 
 service.addNewBall = function (args) { // add player
     const def = Q.defer();
