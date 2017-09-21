@@ -7,12 +7,15 @@ var con = mysql.createConnection({
   user: "b8c58532399431",
   password: "0cc0b94c",
   database: "fitsixes",
-  port:"3306"
+  port:"3306",
+  ssl : true
 });
 
-con.connect(function(err) {
+  con.connect(function(err) {
   if (err) throw err;
 });
+
+
 // service.createTable = function(name){
 //     con.query('CREATE TABLE '+name+' (name VARCHAR(255), address VARCHAR(255))',function(err,result){
 //          if (err) throw err;
