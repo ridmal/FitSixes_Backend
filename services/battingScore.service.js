@@ -5,7 +5,7 @@ const service = {};
 
 service.addScore = function (args) { // add score
   const def = Q.defer();
-  const query = `INSERT INTO battingscore (teamId,matchId,playerId,runs,inningId,six,four,dot) VALUES (${args.teamId},${args.matchId},${args.playerId},${args.runs},${args.inningId},${args.six},${args.four},${args.dot})`;
+  const query = `INSERT INTO battingscore (teamId,matchId,playerId,runs,inningId,isSix,isFour,isDot) VALUES (${args.teamId},${args.matchId},${args.playerId},${args.runs},${args.inningId},${args.isSix},${args.isFour},${args.isDot})`;
   databaseService.addQuery(query)
     .then((results) => {
        def.resolve(results);
@@ -42,6 +42,20 @@ service.matchBattingSummery = function (args) { // add player
     });
 
   return def.promise;
+};
+
+service.updateOvers = function (over,matchId) { // add score
+    const def = Q.defer();
+    const query = `UPDATE matches SET  currentOvers = ${over}  WHERE  matchId = ${matchId} `;
+    databaseService.updateQuery(query)
+        .then((results) => {
+            def.resolve(results);
+        })
+        .catch((error) => {
+            def.reject(error);
+        });
+
+    return def.promise;
 };
 
 module.exports = service;

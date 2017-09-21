@@ -46,8 +46,30 @@ router.get('/getSummaryByMatchId/:id',function(req,res){
     );
 });
 
+
+router.get('/matchSummaryByMatchId/:id',function(req,res){
+    bowler.getSummaryByMatchId(req).then(function(result){
+        res.send(result);
+    }).catch(
+        function(error){
+            res.send(error);
+        }
+    );
+});
+
+router.get('/getMatchByGround/:id/:isLive',function(req,res){
+
+    bowler.getMatchByGround(req).then(function(result){
+        res.send(result);
+    }).catch(
+        function(error){
+            res.send(error);
+        }
+    );
+});
+
 router.post('/addNewBall',function(req,res){ // add a tplayer for perticular team.
-    bowler.addNewBall(req.body).then(function(result){
+    bowler.addNewBall(req.body.bowler,req.body.batting).then(function(result){
         res.send(result);
     }).catch(
         function(error){

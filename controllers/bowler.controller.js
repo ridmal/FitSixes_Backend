@@ -3,20 +3,21 @@
  */
 const Q = require('q');
 const bowlerService = require('../services/bowler.service');
+const battingService = require('../services/battingScore.service');
 
 const controller = {};
 
 controller.getBowlers = function (req) {
     const def = Q.defer();
     let args = {
-        teamId : req.teamId
+        teamId: req.teamId
     }
     bowlerService.getAllBowlers(args).then((result) => {
         def.resolve(result);
-})
-    .catch((error) => {
-        def.reject(error);
-});
+    })
+        .catch((error) => {
+            def.reject(error);
+        });
 
     return def.promise;
 };
@@ -24,54 +25,30 @@ controller.getBowlerById = function (req) {
     const def = Q.defer();
     bowlerService.getBowlerById(req.params.id).then((result) => {
         def.resolve(result);
-})
-    .catch((error) => {
-        def.reject(error);
-});
+    })
+        .catch((error) => {
+            def.reject(error);
+        });
 
     return def.promise;
 };
 
 
 /*controller.getAllWicketsById = function (req) {
-    const def = Q.defer();
-    bowlerService.getAllWicketsById(req.params.id).then((result) => {
-        def.resolve(result);
-})
-    .catch((error) => {
-        def.reject(error);
-});
-    return def.promise;
-};*/
+ const def = Q.defer();
+ bowlerService.getAllWicketsById(req.params.id).then((result) => {
+ def.resolve(result);
+ })
+ .catch((error) => {
+ def.reject(error);
+ });
+ return def.promise;
+ };*/
 
-controller.addNewBall = function (req) {
-    const def = Q.defer();
-    let args = {
-        teamId:req.teamId,
-        matchId:req.matchId,
-        bowlerId:req.bowlerId,
-        runs:req.runs,
-        extras:req.extras,
-        currentBall:req.currentBall,
-        isValidBall:req.isValidBall,
-        isNoBall:req.isNoBall,
-        isWide:req.isWide,
-        isWicket:req.isWicket
-    };
-
-    bowlerService.addNewBall(args).then((result) => {
-        def.resolve(result);
-    })
-        .catch((error) => {
-            def.reject(error);
-        });
-
-    return def.promise;
-};
 
 controller.getSummaryByMatchId = function (req) {
     const def = Q.defer();
-    bowlerService.getSummaryByMatchId(req.params.id).then((result) => {
+    bowlerService.getMatchSummaryByMatchId(req.params.id).then((result) => {
         def.resolve(result);
     })
         .catch((error) => {
@@ -79,5 +56,70 @@ controller.getSummaryByMatchId = function (req) {
         });
     return def.promise;
 };
+
+controller.getMatchByGround = function (req) {
+    const def = Q.defer();
+    bowlerService.getMatchByGround(req.params.id, req.params.isLive).then((result) => {
+        def.resolve(result);
+    })
+        .catch((error) => {
+            def.reject(error);
+        });
+    return def.promise;
+};
+
+controller.addNewBall = function (bowler, batting) {
+    const def = Q.defer();
+    let args = {
+        teamId: bowler.teamId,
+        matchId: bowler.matchId,
+        bowlerId: bowler.bowlerId,
+        runs: bowler.runs,
+        extras: bowler.extras,
+        currentBall: bowler.currentBall,
+        isValidBall: bowler.isValidBall,
+        isNoBall: bowler.isNoBall,
+        isWide: bowler.isWide,
+        isWicket: bowler.isWicket,
+        isRunOut: bowler.isRunOut
+    };
+
+    bowlerService.addNewBall(args).then(() => {
+        let score = {
+            teamId: batting.teamId,
+            matchId: batting.matchId,
+            playerId: batting.playerId,
+            runs: batting.runs,
+            inningId: batting.inningId,
+            isSix: batting.isSix,
+            isFour: batting.isFour,
+            isDot: batting.isDot
+        };
+
+        battingService.addScore(score).then((result) => {
+
+
+            battingService.updateOvers(bowler.over, bowler.matchId).then((result) => {
+                def.resolve(result);
+            })
+                .catch((error) => {
+                    def.reject(error);
+                });
+
+            //def.resolve(result);
+        })
+            .catch((error) => {
+                def.reject(error);
+            });
+
+        //  def.resolve(result);
+    })
+        .catch((error) => {
+            def.reject(error);
+        });
+
+    return def.promise;
+};
+
 
 module.exports = controller;

@@ -51,7 +51,7 @@ service.getBowlerById = function (id){
 
 service.addNewBall = function (args) { // add player
     const def = Q.defer();
-    const query = `INSERT INTO bowlingscore (teamId, matchId, bowlerId, runs, extras, currentBall , isValidBall,isNoBall,isWide,isWicket) VALUES ( '${args.teamId}','${args.matchId}','${args.bowlerId}','${args.runs}','${args.extras}' ,'${args.currentBall}','${args.isValidBall}','${args.isNoBall}','${args.isWide}','${args.isWicket}')`;
+    const query = `INSERT INTO bowlingscore (teamId, matchId, bowlerId, runs, extras, currentBall , isValidBall,isNoBall,isWide,isWicket,isRunOut ) VALUES ( '${args.teamId}','${args.matchId}','${args.bowlerId}','${args.runs}','${args.extras}' ,'${args.currentBall}','${args.isValidBall}','${args.isNoBall}','${args.isWide}','${args.isWicket}','${args.isRunOut}')`;
     databaseService.addQuery(query)
         .then((results) => {
             def.resolve(results);
@@ -76,5 +76,30 @@ service.getSummaryByMatchId = function (id){
     return def.promise;
 };
 
+service.getMatchSummaryByMatchId = function (id){
+    const def = Q.defer();
+    const query = `SELECT t.teamId, t.teamName, t.companyName, m.battingTeamId, SUM(b.runs) AS total, (SUM(b.isWicket) + SUM(b.isRunOut)) AS wickets, m.currentOvers, SUM(b.extras) AS extras FROM bowlingscore b, teams t, matches m WHERE b.matchId = ${id} AND b.teamId = t.teamId AND b.matchId = m.matchId GROUP BY b.matchId`;
+    databaseService.selectQuery(query)
+        .then((results) => {
+            def.resolve(results);
+        })
+        .catch((error) => {
+            def.reject(error);
+        });
+    return def.promise;
+};
+
+service.getMatchByGround = function (id,isLive){
+    const def = Q.defer();
+    const query = `SELECT t.teamId, t.teamName, t.companyName, m.battingTeamId, SUM(b.runs) AS total, (SUM(b.isWicket) + SUM(b.isRunOut)) AS wickets, m.currentOvers, SUM(b.extras) AS extras FROM bowlingscore b, teams t, matches m WHERE m.groundId = ${id} AND m.isLive = ${isLive} AND b.teamId = t.teamId AND b.matchId = m.matchId GROUP BY b.matchId`;
+    databaseService.selectQuery(query)
+        .then((results) => {
+            def.resolve(results);
+        })
+        .catch((error) => {
+            def.reject(error);
+        });
+    return def.promise;
+};
 
 module.exports = service;
