@@ -6,8 +6,8 @@ var con = mysql.createConnection({
   host: "in-cdbr-azure-south-c.cloudapp.net",
   user: "b8c58532399431",
   password: "0cc0b94c",
-  database: "fitsixes"
-
+  database: "fitsixes",
+  port:"3306"
 });
 
 con.connect(function(err) {
