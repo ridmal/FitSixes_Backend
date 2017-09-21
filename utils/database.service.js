@@ -13,13 +13,7 @@ var con = mysql.createConnection({
 con.connect(function(err) {
   if (err) throw err;
 });
-// service.createTable = function(name){
-//     con.query('CREATE TABLE '+name+' (name VARCHAR(255), address VARCHAR(255))',function(err,result){
-//          if (err) throw err;
 
-//         console.log("Table created");
-//     });
-// };
 service.selectQuery = function(query){ // select query 
   const def = Q.defer();
       con.query(query,function(err,result){
