@@ -15,6 +15,18 @@ controller.getLiveMatches = function () {
   return def.promise;
 };
 
+controller.getTeams = function () {
+  const def = Q.defer();
+  publicService.getTeams().then((result) => { 
+    def.resolve(result);
+  })
+    .catch((error) => {
+      def.reject(error);
+    }); 
+
+  return def.promise;
+};
+
 
 
 

@@ -43,4 +43,26 @@ service.getLiveMatches= function (args) { // get players for perticular team
   return def.promise;
 };
 
+
+
+service.getTeams= function (args) { // get players for perticular team
+  const def = Q.defer();
+  const query = ` SELECT * 
+                  FROM teams
+                  INNER JOIN players
+                  ON teams.teamId= players.teamId
+                `;
+  databaseService.selectQuery(query)
+    .then((results) => {
+     //  console.log(results);
+       def.resolve(results);
+          })
+    .catch((error) => {
+      def.reject(error);
+    });
+
+  return def.promise;
+};
+
+
 module.exports = service;
