@@ -32,4 +32,17 @@ controller.addTeam = function (req) {
   return def.promise;
 };
 
+controller.removeTeam = function (teamId) {
+  const def = Q.defer();
+
+  teamService.removeTeam(teamId).then((req) => { 
+    def.resolve(result);
+  })
+    .catch((error) => {
+      def.reject(error);
+    });
+
+  return def.promise;
+};
+
 module.exports = controller;

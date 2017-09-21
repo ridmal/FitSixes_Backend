@@ -34,4 +34,33 @@ service.addTeam = function (args) { // add team
 
   return def.promise;
 };
+
+service.removeTeam = function (teamId) { // add team
+  const def = Q.defer();
+  const query1 = `DELETE FROM teams WHERE teamId=`+ teamId;
+
+  
+  databaseService.addQuery(query1)
+    .then((results) => {
+       def.resolve("Successfull removed");
+          })
+    .catch((error) => {
+      def.reject(error);
+    });
+
+
+  const query2 = `DELETE FROM players WHERE teamId=`+ teamId;
+
+  
+  databaseService.addQuery(query2)
+    .then((results) => {
+       def.resolve("Successfull removed");
+          })
+    .catch((error) => {
+      def.reject(error);
+    });
+  
+
+  return def.promise;
+};
 module.exports = service;
