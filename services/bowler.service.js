@@ -102,4 +102,31 @@ service.getMatchByGround = function (id,isLive){
     return def.promise;
 };
 
+service.getScore = function (matchId,playerId){
+    const def = Q.defer();
+    const query = `SELECT b.runs FROM battingscore b WHERE b.matchId = ${matchId} AND b.playerId = ${playerId}`;
+    databaseService.selectQuery(query)
+        .then((results) => {
+            def.resolve(results);
+        })
+        .catch((error) => {
+            def.reject(error);
+        });
+    return def.promise;
+};
+
+service.getMatchSummary = function (matchId,teamId){
+    const def = Q.defer();
+    const query = `SELECT t.teamId, t.teamName, t.companyName, m.battingTeamId, SUM(b.runs) AS total, ( SUM(b.isWicket) + SUM(b.isRunOut) ) AS wickets, m.currentOvers, SUM(b.extras) AS extras FROM bowlingscore b, teams t, matches m WHERE b.matchId = ${matchId} AND b.teamId = ${teamId} AND b.teamId = t.teamId AND b.matchId = m.matchId GROUP BY b.matchId`;
+    databaseService.selectQuery(query)
+        .then((results) => {
+            def.resolve(results);
+        })
+        .catch((error) => {
+            def.reject(error);
+        });
+    return def.promise;
+};
+
+
 module.exports = service;

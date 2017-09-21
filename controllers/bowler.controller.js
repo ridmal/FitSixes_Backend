@@ -121,5 +121,33 @@ controller.addNewBall = function (bowler, batting) {
     return def.promise;
 };
 
+controller.getScore = function (req) {
+    const def = Q.defer();
+    bowlerService.getScore(req.body.matchId, req.body.playerId).then((result) => {
+        var list = [];
+        for (var i = 0 ; i < result.length ;i++){
+            list.push(result[i].runs)
+        }
+
+        bowlerService.getMatchSummary(req.body.matchId,req.body.teamId).then((result) => {
+
+            var model = {
+                playerScore: list,
+                matchScore: result
+            };
+
+            def.resolve(model);
+        })
+            .catch((error) => {
+                def.reject(error);
+            });
+
+        //def.resolve(model);
+    })
+        .catch((error) => {
+            def.reject(error);
+        });
+    return def.promise;
+};
 
 module.exports = controller;
