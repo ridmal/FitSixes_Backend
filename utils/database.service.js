@@ -7,7 +7,8 @@ var con = mysql.createConnection({
   user: "b8c58532399431",
   password: "0cc0b94c",
   database: "fitsixes",
-  port:"3306"
+  port:"3306",
+  ssl : true
 });
 
 con.connect(function(err) {
@@ -23,6 +24,7 @@ con.connect(function(err) {
 service.selectQuery = function(query){ // select query 
   const def = Q.defer();
       con.query(query,function(err,result){
+          con.end();
          if (err) def.reject(err);
          else def.resolve(result);
     });
@@ -31,6 +33,7 @@ service.selectQuery = function(query){ // select query
 service.addQuery = function(query){ // insert query 
     const def = Q.defer();
       con.query(query,function(err,result){
+         con.end();
          if (err) def.reject(err);
          else def.resolve("successfully added");
     });
@@ -40,6 +43,7 @@ service.addQuery = function(query){ // insert query
 service.deleteQuery = function(query){ // insert query 
     const def = Q.defer();
       con.query(query,function(err,result){
+         con.end();
          if (err) def.reject(err);
          else def.resolve("successfully removed");
     });
@@ -49,6 +53,7 @@ service.deleteQuery = function(query){ // insert query
 service.bulkInsert = function(query,values){ // insert query 
     const def = Q.defer();
       con.query(query,[values],function(err,result){
+         con.end();
          if (err) def.reject(err);
          else def.resolve("successfully added");
     });
@@ -58,6 +63,7 @@ service.bulkInsert = function(query,values){ // insert query
 service.updateQuery = function(query){ // update query
     const def = Q.defer();
       con.query(query,function(err,result){
+         con.end();
          if (err) def.reject(err);
          else def.resolve("successfully Updated");
     });
