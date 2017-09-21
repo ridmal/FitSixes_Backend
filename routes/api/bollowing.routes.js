@@ -69,7 +69,7 @@ router.get('/getMatchByGround/:id/:isLive',function(req,res){
 });
 
 router.post('/addNewBall',function(req,res){ // add a tplayer for perticular team.
-    bowler.addNewBall(req.body).then(function(result){
+    bowler.addNewBall(req.body.bowler,req.body.batting).then(function(result){
         res.send(result);
     }).catch(
         function(error){
