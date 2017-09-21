@@ -18,8 +18,7 @@ controller.addTeam = function (req) {
   const def = Q.defer();
   let args = {
    tname :req.teamName,
-   cname :req.companyName,
-   rank :0
+   cname :req.companyName
   }
 
   teamService.addTeam(args).then((result) => { 
@@ -35,7 +34,7 @@ controller.addTeam = function (req) {
 controller.removeTeam = function (teamId) {
   const def = Q.defer();
 
-  teamService.removeTeam(teamId).then((req) => { 
+  teamService.removeTeam(teamId).then((result) => { 
     def.resolve(result);
   })
     .catch((error) => {

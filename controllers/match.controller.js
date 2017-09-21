@@ -48,6 +48,21 @@ controller.addMatch = function (req) {
 
   return def.promise;
 };
+
+controller.removeMatch = function (macthId) {
+  const def = Q.defer();
+
+  matchService.removeMatch(macthId).then((result) => { 
+    def.resolve(result);
+  })
+    .catch((error) => {
+      def.reject(error);
+    });
+
+  return def.promise;
+};
+
+
 controller.getMatchDetails = function (req) {
   const def = Q.defer();
   let args = {

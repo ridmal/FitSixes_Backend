@@ -51,5 +51,20 @@ service.addMatch = function (args) { // add player
   return def.promise;
 };
 
+service.removeMatch = function (matchId) { // add player 
+  const def = Q.defer();
+  const query = `DELETE FROM matches WHERE matchId=`+ matchId;
+  
+  databaseService.deleteQuery(query)
+    .then((results) => {
+       def.resolve(results);
+          })
+    .catch((error) => {
+      def.reject(error);
+    });
+
+  return def.promise;
+};
+
 
 module.exports = service;
