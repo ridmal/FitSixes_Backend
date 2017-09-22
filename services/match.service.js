@@ -52,7 +52,6 @@ service.addMatch = function (args) { // add player
 };
 
 service.getMatchDetails= function (args) { // get all Teams
-
   const def = Q.defer();
   const query = `SELECT * FROM matches where matchId = ${args.matchId}`;
   databaseService.selectQuery(query)
