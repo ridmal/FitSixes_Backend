@@ -79,4 +79,16 @@ router.post('/getScore',function(req,res){
     );
 });
 
+router.get('/getMatchByGround/:id/:isLive',function(req,res){
+
+    bowler.getMatchByGround(req).then(function(result){
+        res.send(result);
+    }).catch(
+        function(error){
+            res.send(error);
+        }
+    );
+});
+
+
 module.exports = router;
