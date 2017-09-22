@@ -50,14 +50,14 @@ controller.getAllLiveScores = function () {
     const def = Q.defer();
     var model = {};
 
-    liveService.getMatchByGround(1, 1).then((result) => {
+    liveService.getAllLiveScores(1).then((result) => {
         if (result.length > 0)
             model.groundA = result;
         else
             model.groundA = null;
 
 
-        liveService.getMatchByGround(2, 1).then((result) => {
+        liveService.getAllLiveScores(2).then((result) => {
             //model.groundB = result;
 
             if (result.length > 0)
@@ -70,7 +70,7 @@ controller.getAllLiveScores = function () {
                 def.reject(error);
             });
 
-        liveService.getMatchByGround(3, 1).then((result) => {
+        liveService.getAllLiveScores(3).then((result) => {
             if (result.length > 0)
                 model.groundC = result;
             else
@@ -80,7 +80,7 @@ controller.getAllLiveScores = function () {
                 def.reject(error);
             });
 
-        liveService.getMatchByGround(4, 1).then((result) => {
+        liveService.getAllLiveScores(4).then((result) => {
             if (result.length > 0)
                 model.groundD = result;
             else

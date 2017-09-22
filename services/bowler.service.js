@@ -146,5 +146,43 @@ service.getMatchByGround = function (id,isLive){
 };
 
 
+service.changeInning = function (args){
+    const def = Q.defer();
+    const query = `UPDATE matches SET currentOvers = ${args.currentOvers},isLive = ${args.isLive}, battingTeamId = ${args.battingTeamId}, currentOvers = ${args.currentOvers} WHERE matchId = ${args.matchId}`;
+    databaseService.updateQuery(query)
+        .then((results) => {
+            def.resolve(results);
+        })
+        .catch((error) => {
+            def.reject(error);
+        });
+    return def.promise;
+};
+
+service.getMatchByMatchId = function (id){
+    const def = Q.defer();
+    const query = `SELECT * FROM matches WHERE matchId = ${id}`;
+    databaseService.selectQuery(query)
+        .then((results) => {
+            def.resolve(results);
+        })
+        .catch((error) => {
+            def.reject(error);
+        });
+    return def.promise;
+};
+
+service.updateMatch = function (args){
+    const def = Q.defer();
+    const query = `UPDATE matches SET currentOvers = ${args.currentOvers}, 1stScore = ${args.firstScore}, team1Wicket = ${args.teamOneWicket}, 2ndScore = ${args.secondScore}, team2Wicket = ${args.teamTwoWickets}, wonTeamId = ${args.wonTeamId} WHERE matchId = ${args.matchId}`;
+    databaseService.updateQuery(query)
+        .then((results) => {
+            def.resolve(results);
+        })
+        .catch((error) => {
+            def.reject(error);
+        });
+    return def.promise;
+};
 
 module.exports = service;

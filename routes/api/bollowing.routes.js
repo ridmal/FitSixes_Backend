@@ -68,6 +68,7 @@ router.post('/addNewBall',function(req,res){ // add a tplayer for perticular tea
     );
 });
 
+
 router.post('/getScore',function(req,res){
 
     bowler.getScore(req).then(function(result){
@@ -81,7 +82,7 @@ router.post('/getScore',function(req,res){
 
 router.get('/getMatchByGround/:id/:isLive',function(req,res){
 
-    bowler.getMatchByGround(req).then(function(result){
+    bowler.getMatchByGround(req.body).then(function(result){
         res.send(result);
     }).catch(
         function(error){
@@ -90,5 +91,24 @@ router.get('/getMatchByGround/:id/:isLive',function(req,res){
     );
 });
 
+router.post('/changeInning',function(req,res){ // add a tplayer for perticular team.
+    bowler.changeInning(req.body).then(function(result){
+        res.send(result);
+    }).catch(
+        function(error){
+            res.send(error);
+        }
+    );
+});
+
+router.post('/endInning',function(req,res){ // add a tplayer for perticular team.
+    bowler.endInning(req).then(function(result){
+        res.send(result);
+    }).catch(
+        function(error){
+            res.send(error);
+        }
+    );
+});
 
 module.exports = router;
