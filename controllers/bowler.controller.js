@@ -57,16 +57,6 @@ controller.getSummaryByMatchId = function (req) {
     return def.promise;
 };
 
-controller.getMatchByGround = function (req) {
-    const def = Q.defer();
-    bowlerService.getMatchByGround(req.params.id, req.params.isLive).then((result) => {
-        def.resolve(result);
-    })
-        .catch((error) => {
-            def.reject(error);
-        });
-    return def.promise;
-};
 
 controller.addNewBall = function (bowler, batting) {
     const def = Q.defer();
