@@ -58,8 +58,15 @@ router.post('/removeMatch',function(req,res){ // add a tplayer for perticular te
     }
   );
 });
-
-
+router.get('/getAllRecentMatches',function(req,res){ // add a tplayer for perticular team.
+ matchController.getRecentMatchDetails().then(function(result){
+    res.send(result);
+  }).catch(
+    function(error){
+      res.send(error);
+    }
+  );
+});
 router.post('/getMatchDetails',function(req,res){ // add a tplayer for perticular team.
  matchController.getMatchDetails(req.body).then(function(result){
     res.send(result);
