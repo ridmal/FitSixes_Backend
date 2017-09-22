@@ -159,4 +159,102 @@ controller.getMatchByGround = function (req) {
     return def.promise;
 };
 
+
+controller.changeInning = function (req) {
+    const def = Q.defer();
+
+    bowlerService.getMatchByMatchId(req.matchId).then((result) => {
+
+        if (result.length == 1){
+
+
+            if (result[0].inningId == 1 )
+                result[0].inningId = 0;
+            else
+                result[0].inningId = 1;
+
+            let args = {
+                matchId: req.matchId,
+                isLive: 1,
+                battingTeamId: req.battingTeamId,
+                currentOvers: 0,
+            };
+
+            bowlerService.changeInning(args).then((result) => {
+
+                def.resolve(result);
+            })
+                .catch((error) => {
+                    def.reject(error);
+                });
+
+        }else{
+            def.resolve("Invalid attempt");
+        }
+
+
+    })
+        .catch((error) => {
+            def.reject(error);
+        });
+
+    return def.promise;
+};
+
+
+controller.endMatch = function (req) {
+    const def = Q.defer();
+
+    bowlerService.getMatchByMatchId(req.body.matchId).then((matchResult) => {
+
+        if (matchResult.length == 1){
+
+
+            //getMatchSummaryByMatchId
+            bowlerService.getMatchSummaryByMatchId(req.body.matchId).then((result) => {
+
+                if (result.length == 2){
+
+                    let args = {
+                        matchId: req.body.matchId,
+                        currentOvers: matchResult[0].overs,
+                        firstScore: result[0].total,
+                        teamOneWicket: result[0].wickets,
+                        secondScore: result[1].total,
+                        teamTwoWickets: result[1].wickets,
+                        wonTeamId: req.body.wonTeamId
+                    };
+
+                    bowlerService.updateMatch(args).then((result) => {
+                        def.resolve(result);
+                    })
+                        .catch((error) => {
+                            def.reject(error);
+                        });
+
+
+                }else{
+                    def.resolve("Match is not finished yet");
+                }
+
+                //def.resolve(result);
+            })
+                .catch((error) => {
+                    def.reject(error);
+                });
+            return def.promise;
+
+
+
+        }else{
+            def.resolve("Invalid attempt");
+        }
+    })
+        .catch((error) => {
+            def.reject(error);
+        });
+    return def.promise;
+};
+
+
 module.exports = controller;

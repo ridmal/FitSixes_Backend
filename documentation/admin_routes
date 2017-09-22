@@ -80,6 +80,14 @@ remove a match
 
 	response body  - "successfully removed"
 
+get recent matches
+
+	route - http://localhost:3000/api/match/getAllRecentMatches
+	type - get
+	request body  - none
+
+	response body  -[{"matchId":2,"name":"Creative vs 99X","groundId":2,"overs":4,"balls":6,"team1Id":4,"team2Id":5,"roundId":1,"isLive":0,"inningId":1,"battingTeamId":4,"currentOvers":0,"1stScore":0,"team1Wicket":null,"2ndScore":null,"team2Wicket":null}]
+
 //=========================================== teams ========================================
 
 create a team
