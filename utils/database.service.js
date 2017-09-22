@@ -11,11 +11,11 @@ var con = mysql.createConnection(
         port: "3306",
         ssl: true
 
-        /*host: "localhost",
-        user: "root",
-        password: "",
-        database: "fitsixes",
-        port:"3306"*/
+        /*host: "127.0.0.1",
+         user: "root",
+         password: "",
+         database: "fitsixes",
+         port:"3306"*/
 
     });
 
