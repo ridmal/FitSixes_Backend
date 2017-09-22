@@ -202,7 +202,7 @@ controller.changeInning = function (req) {
 };
 
 
-controller.endInning = function (req) {
+controller.endMatch = function (req) {
     const def = Q.defer();
 
     bowlerService.getMatchByMatchId(req.body.matchId).then((matchResult) => {
@@ -222,7 +222,7 @@ controller.endInning = function (req) {
                         teamOneWicket: result[0].wickets,
                         secondScore: result[1].total,
                         teamTwoWickets: result[1].wickets,
-                        wonTeamId: req.body.wonTeamId,
+                        wonTeamId: req.body.wonTeamId
                     };
 
                     bowlerService.updateMatch(args).then((result) => {

@@ -101,8 +101,8 @@ router.post('/changeInning',function(req,res){ // add a tplayer for perticular t
     );
 });
 
-router.post('/endInning',function(req,res){ // add a tplayer for perticular team.
-    bowler.endInning(req).then(function(result){
+router.post('/endMatch',function(req,res){ // add a tplayer for perticular team.
+    bowler.endMatch(req).then(function(result){
         res.send(result);
     }).catch(
         function(error){
