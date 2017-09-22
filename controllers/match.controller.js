@@ -82,28 +82,27 @@ controller.getMatchDetails = function (req) {
       balls : result[0].balls,
       teams : []
     }
-   console.log(team1args.teamId);
-    Q.all([teamService.getTeamDetails(team1args),playerService.getPlayers(team1args)]).then(
+    Q.all([teamService.getTeamDetails(team1args),playerService.getPlayers(team1args),teamService.getTeamDetails(team2args),playerService.getPlayers(team2args)]).then(
       (res)=>{
-        let team = {
+        let team1 = {
            teamId : res[0][0].teamId,
            teamName : res[0][0].teamName,
-           players :[]
+           players :res[1]
          }
-         for(let i=0;i<res[1].length;i++){
-          let player = {
-            playerId : res[i].playerId,
-            playerName : res[i].playerName
-          }
-           players.add(player);
-        }
-         teams.add(team);
-         def.resolve(match);
+           let team2 = {
+           teamId : res[2][0].teamId,
+           teamName : res[2][0].teamName,
+           players :res[3]
+         }
+         match.teams.push(team1); 
+         match.teams.push(team2);  
+        def.resolve(match);
       }
     ).catch(()=>{
         def.reject(error);
     }
     );
+ 
   })
     .catch((error) => {
       def.reject(error);
