@@ -91,11 +91,12 @@ controller.getMatchDetails = function (req) {
       teamId:result[0].team2Id
     }
     let match = {
-      matchId : result[0].macthId,
+      matchId : req.matchId,
       overs : result[0].overs,
       balls : result[0].balls,
       teams : []
     }
+    console.log(match.matchId);
     Q.all([teamService.getTeamDetails(team1args),playerService.getPlayers(team1args),teamService.getTeamDetails(team2args),playerService.getPlayers(team2args)]).then(
       (res)=>{
         let team1 = {
