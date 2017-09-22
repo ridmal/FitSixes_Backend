@@ -91,6 +91,7 @@ controller.getMatchDetails = function (req) {
       teamId:result[0].team2Id
     }
     let match = {
+      matchId : result[0].macthId,
       overs : result[0].overs,
       balls : result[0].balls,
       teams : []
