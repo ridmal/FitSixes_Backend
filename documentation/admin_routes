@@ -137,3 +137,49 @@ add players to a team
 
 	response body  - "successfully added"
 
+	======================= score sheet data ======================
+
+	get match details
+
+	route - http://localhost:3000/api/match/getMatchDetails
+    type -post
+	request body  - {
+						"matchId" : 1
+					}
+
+	response body  - {
+						"overs": 4,
+						"balls": 6,
+						"teams": [
+							{
+								"teamId": 1,
+								"teamName": "Batch 13",
+								"players": [
+									{
+										"playerId": 1,
+										"teamId": 1,
+										"name": "Nimesha",
+										"age": 20
+									},
+									{
+										"playerId": 2,
+										"teamId": 1,
+										"name": "Ridmal",
+										"age": 20
+									},
+									{
+										"playerId": 3,
+										"teamId": 1,
+										"name": "Achira",
+										"age": 20
+									}
+								]
+							},
+							{
+								"teamId": 2,
+								"teamName": "Arimac Team",
+								"players": []
+							}
+						]
+					}
+
