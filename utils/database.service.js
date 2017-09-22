@@ -14,15 +14,15 @@ var con = mysql.createConnection({
   con.connect(function(err) {
   if (err) throw err;
 });
+<<<<<<< HEAD
+=======
 
 
 // service.createTable = function(name){
 //     con.query('CREATE TABLE '+name+' (name VARCHAR(255), address VARCHAR(255))',function(err,result){
 //          if (err) throw err;
+>>>>>>> b6389b10d50b4cf8fdb0290a63c8ad7ddc469f46
 
-//         console.log("Table created");
-//     });
-// };
 service.selectQuery = function(query){ // select query 
   const def = Q.defer();
       con.query(query,function(err,result){
