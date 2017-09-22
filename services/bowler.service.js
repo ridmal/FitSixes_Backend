@@ -89,18 +89,6 @@ service.getMatchSummaryByMatchId = function (id){
     return def.promise;
 };
 
-service.getMatchByGround = function (id,isLive){
-    const def = Q.defer();
-    const query = `SELECT t.teamId, t.teamName, t.companyName, SUM(b.runs) AS total, SUM(b.extras) AS extras, (SUM(b.isWicket) + SUM(b.isRunOut)) AS wickets, m.currentOvers AS overs, m.battingTeamId FROM bowlingscore b, teams t, matches m WHERE b.battingTeamId = t.teamId AND m.matchId = b.matchId AND m.groundId = ${id} AND m.isLive = ${isLive} GROUP BY b.bowlingTeamId`;
-    databaseService.selectQuery(query)
-        .then((results) => {
-            def.resolve(results);
-        })
-        .catch((error) => {
-            def.reject(error);
-        });
-    return def.promise;
-};
 
 service.getScore = function (matchId,playerId){
     const def = Q.defer();

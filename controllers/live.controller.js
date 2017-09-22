@@ -17,6 +17,15 @@ controller.getMatchByGroundId = function (groundId) {
   return def.promise;
 };
 
-
+controller.getMatchByGround = function (req) {
+    const def = Q.defer();
+    liveService.getMatchByGround(req.params.id, req.params.isLive).then((result) => {
+        def.resolve(result);
+    })
+        .catch((error) => {
+            def.reject(error);
+        });
+    return def.promise;
+};
 
 module.exports = controller;
