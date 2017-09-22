@@ -26,7 +26,6 @@ router.get('/getTeams',function(req,res){ // get all teams
   publicController.getTeams().then(function(result){
 
   	var teamId_temp=-1;
-  	console.log(result);
 
   	for (var i = 0, len = result.length; i < len; i++) {
 

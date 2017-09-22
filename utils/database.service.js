@@ -2,14 +2,7 @@ var mysql = require('mysql');
 const Q = require('q');
 const service = {};
 
-// var con = mysql.createConnection({
-//   host: "in-cdbr-azure-south-c.cloudapp.net",
-//   user: "b8c58532399431",
-//   password: "0cc0b94c",
-//   database: "fitsixes",
-//   port:"3306",
-//   ssl : true
-// });
+
 var pool  = mysql.createPool({
   connectionLimit : 4,
   host            : "in-cdbr-azure-south-c.cloudapp.net",
@@ -20,25 +13,6 @@ var pool  = mysql.createPool({
   ssl             : true,
   waitForConnections : true
 });
-//   con.connect(function(err) {
-//   if (err) throw err;
-// });
-
-
-// service.createTable = function(name){
-//     con.query('CREATE TABLE '+name+' (name VARCHAR(255), address VARCHAR(255))',function(err,result){
-//          if (err) throw err;
-
-//         console.log("Table created");
-//     });
-// };
-// pool.getConnection(function(err, connection) {
-//   // Use the connection
-//   connection.query('SELECT something FROM sometable', function (error, results, fields) {
-//     connection.release();
-//     if (error) throw error;
-//   });
-// });
 
 service.selectQuery = function(query){ // select query 
   const def = Q.defer();
