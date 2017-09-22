@@ -51,6 +51,10 @@ controller.addMatch = function (req) {
   return def.promise;
 };
 
+
+
+
+
 controller.removeMatch = function (macthId) {
   const def = Q.defer();
 
@@ -80,6 +84,7 @@ controller.getAllMatches = function () {
 controller.getRecentMatchDetails = function () {
   const def = Q.defer();
 
+
   matchService.getRecentMatches().then((result) => { 
     def.resolve(result);
   })
@@ -89,6 +94,53 @@ controller.getRecentMatchDetails = function () {
 
   return def.promise;
 };
+
+
+
+controller.matchOverallInfoById = function (macthId) {
+  const def = Q.defer();
+
+  matchService.matchOverallInfoById(macthId).then((result) => { 
+
+    def.resolve(result);
+  })
+    .catch((error) => {
+      def.reject(error);
+    });
+
+  return def.promise;
+};
+
+
+controller.getBowlingPlayersInfo = function (macthId,teamId) {
+  const def = Q.defer();
+
+  matchService.getBowlingPlayersInfo(macthId,teamId).then((result) => { 
+
+    def.resolve(result);
+  })
+    .catch((error) => {
+      def.reject(error);
+    });
+
+  return def.promise;
+};
+
+
+controller.getBattingPlayersInfo = function (macthId,teamId) {
+  const def = Q.defer();
+
+  matchService.getBattingPlayersInfo(macthId,teamId).then((result) => { 
+
+    def.resolve(result);
+  })
+    .catch((error) => {
+      def.reject(error);
+    });
+
+  return def.promise;
+};
+
 
 controller.getMatchDetails = function (req) {
   const def = Q.defer();

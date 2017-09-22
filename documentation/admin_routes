@@ -208,3 +208,52 @@ add players to a team
 						]
 					}
 
+
+
+	======================= get score sheet data (refresh issus) ======================
+
+	get match details
+
+	route - http://localhost:8080/api/match/matchOverallInfoById/1
+    type -get
+	request body  - none
+
+	response body  - {
+					    "matchId": 1,
+					    "matchName": "Batch13 Vs Arimac",
+					    "groundId": 1,
+					    "groundName": "A",
+					    "InningId": 1,
+					    "curBattingTeam": {
+					        "id": 1,
+					        "name": "Batch 13"
+					    },
+					    "curBowlingTeam": {
+					        "id": 2,
+					        "name": "Arimac Team"
+					    },
+					    "Innings": [
+					        {
+					            "battingTeam": {
+					                "players": [],
+					                "teamName": "Batch 13",
+					                "teamId": 1
+					            },
+					            "bowlingTeam": {
+					                "players": [
+					                    {
+					                        "playerId": 4,
+					                        "name": "Isuru",
+					                        "runs": 26,
+					                        "wides": 0,
+					                        "noBalls": 1,
+					                        "wickets": 0
+					                    }
+					                ],
+					                "teamName": "Arimac Team",
+					                "teamId": 2
+					            },
+					            "id": 1
+					        }
+					    ]
+					}
