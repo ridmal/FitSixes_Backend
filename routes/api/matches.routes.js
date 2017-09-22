@@ -37,6 +37,18 @@ router.post('/createMatch',function(req,res){ // add a tplayer for perticular te
 });
 
 
+router.get('/getAllMatches',function(req,res){ // add a tplayer for perticular team.
+ matchController.getAllMatches().then(function(result){
+    res.send(result);
+  }).catch(
+    function(error){
+      res.send(error);
+    }
+  );
+});
+
+
+
 router.post('/removeMatch',function(req,res){ // add a tplayer for perticular team.
  matchController.removeMatch(req.body.matchId).then(function(result){
     res.send(result);

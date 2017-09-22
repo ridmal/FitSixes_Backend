@@ -51,6 +51,21 @@ service.addMatch = function (args) { // add player
   return def.promise;
 };
 
+service.getAllMatches = function () { // add player 
+  const def = Q.defer();
+  const query = `SELECT matchId,name FROM matches`;
+  databaseService.selectQuery(query)
+    .then((results) => {
+       def.resolve(results);
+          })
+    .catch((error) => {
+      def.reject(error);
+    });
+
+  return def.promise;
+};
+
+
 service.getMatchDetails= function (args) { // get all Teams
   const def = Q.defer();
   const query = `SELECT * FROM matches where matchId = ${args.matchId}`;

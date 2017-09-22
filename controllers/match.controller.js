@@ -64,6 +64,19 @@ controller.removeMatch = function (macthId) {
   return def.promise;
 };
 
+controller.getAllMatches = function () {
+  const def = Q.defer();
+
+  matchService.getAllMatches().then((result) => { 
+    def.resolve(result);
+  })
+    .catch((error) => {
+      def.reject(error);
+    });
+
+  return def.promise;
+};
+
 
 controller.getMatchDetails = function (req) {
   const def = Q.defer();
