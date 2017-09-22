@@ -51,11 +51,10 @@ service.addMatch = function (args) { // add player
   return def.promise;
 };
 
-service.removeMatch = function (matchId) { // add player 
+service.getMatchDetails= function (args) { // get all Teams
   const def = Q.defer();
-  const query = `DELETE FROM matches WHERE matchId=`+ matchId;
-  
-  databaseService.deleteQuery(query)
+  const query = `SELECT * FROM matches where matchId = ${args.matchId}`;
+  databaseService.selectQuery(query)
     .then((results) => {
        def.resolve(results);
           })
@@ -65,6 +64,23 @@ service.removeMatch = function (matchId) { // add player
 
   return def.promise;
 };
+
+service.removeMatch = function (matchId) { // add player 
+  const def = Q.defer();
+  const query = `DELETE FROM matches WHERE matchId=`+ matchId;
+  
+  databaseService.deleteQuery(query)
+    .then((results) => {
+       def.resolve(results);
+          })
+    .catch((error) => {
+      console.log(error);
+      def.reject(error);
+    });
+  return def.promise;
+};
+
+
 
 
 module.exports = service;
