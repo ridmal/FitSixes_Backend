@@ -137,8 +137,8 @@ controller.getScore = function (req) {
 
                 var model = {
                     playerScore : list,
-                    matchResult : matchResult,
-                    bowlerResult : bowlerResult
+                    matchResult : matchResult[0],
+                    bowlerResult : bowlerResult[0]
                 };
 
                 def.resolve(model);
