@@ -3,9 +3,9 @@ const publicService = require('../services/public.service');
 
 const controller = {};
 
-controller.getLiveMatches = function () {
+controller.getPastMatches = function () {
   const def = Q.defer();
-  publicService.getLiveMatches().then((result) => { 
+  publicService.getPastMatches().then((result) => { 
     def.resolve(result);
   })
     .catch((error) => {

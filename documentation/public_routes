@@ -1,0 +1,60 @@
+// public routes documentation
+
+
+//=========================================== teams ========================================
+
+Get team details
+
+	route - http://localhost:3000/api/public/getTeams
+	type - get
+	request body  - none
+	response body  -[
+					    {
+					        "teamId": 3,
+					        "teamName": "Arimac Team",
+					        "companyName": "Arimac",
+					        "playes": [
+					            {
+					                "playerId": 4,
+					                "name": "Isuru"
+					            },
+					            {
+					                "playerId": 5,
+					                "name": "Neranjan"
+					            },
+					            {
+					                "playerId": 6,
+					                "name": "Thasun"
+					            }
+					        ]
+					    },
+					    {
+					        "teamId": 4,
+					        "teamName": "99X Team",
+					        "companyName": "99X",
+					        "playes": [
+					            {
+					                "playerId": 74,
+					                "name": "rid"
+					            },
+					            {
+					                "playerId": 84,
+					                "name": "achi"
+					            },
+					            {
+					                "playerId": 94,
+					                "name": "hasi"
+					            }
+					        ]
+					    }
+					]
+
+
+//=========================================== matches ========================================
+
+Get past matches
+
+	route - http://localhost:3000/api/public/getPastMatches
+	type - get
+	request body  - none
+	response body  -
