@@ -51,6 +51,23 @@ create a match
 
 	response body  - "successfully added"
 
+get match list
+
+	route - http://localhost:3000/api/match/getAllMatches
+	type - get
+	request body  - none
+
+	response body  - [
+					    {
+					        "matchId": 1,
+					        "name": "Batch13 Vs Arimac"
+					    },
+					    {
+					        "matchId": 2,
+					        "name": "Creative vs 99X"
+					    }
+					]
+
 
 remove a match
 
