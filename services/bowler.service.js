@@ -132,10 +132,9 @@ service.getBowlerByIdAndMatchId = function (bowlerId,matchId){
 
 };
 
-service.getBowlerByIdAndMatchId = function (bowlerId,matchId){
-
+service.getMatchByGround = function (id,isLive){
     const def = Q.defer();
-    const query = `SELECT b.bowlerId, p.name, p.teamId, t.teamName, t.companyName, SUM(b.runs) AS totalRuns, SUM(b.extras) AS extras, SUM(b.isWide) AS wides, SUM(b.isNoBall) AS noBalls, SUM(b.isWicket) AS wickets, MAX(b.currentBall) AS lastBall, ( SUM(b.runs) / SUM(b.isValidBall) ) AS eco FROM bowlingscore b, players p, teams t WHERE b.bowlerId = ${bowlerId} AND b.matchId = ${matchId} AND p.playerId = b.bowlerId AND p.teamId = t.teamId GROUP BY b.bowlerId`;
+    const query = `SELECT t.teamId, t.teamName, t.companyName, SUM(b.runs) AS total, SUM(b.extras) AS extras, (SUM(b.isWicket) + SUM(b.isRunOut)) AS wickets, m.currentOvers AS overs, m.battingTeamId FROM bowlingscore b, teams t, matches m WHERE b.battingTeamId = t.teamId AND m.matchId = b.matchId AND m.groundId = ${id} AND m.isLive = ${isLive} GROUP BY b.bowlingTeamId`;
     databaseService.selectQuery(query)
         .then((results) => {
             def.resolve(results);
@@ -143,10 +142,9 @@ service.getBowlerByIdAndMatchId = function (bowlerId,matchId){
         .catch((error) => {
             def.reject(error);
         });
-
     return def.promise;
-
 };
+
 
 
 module.exports = service;
