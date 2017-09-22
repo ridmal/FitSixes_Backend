@@ -1,0 +1,221 @@
+
+----------------------------- Get All Bowlers Summary -----------------------------
+
+http://localhost:3000/api/bowler/getAllBowlers
+Type : Get
+Response :
+
+[
+    {
+        "bowlerId": 1,
+        "name": "Nimesha",
+        "teamId": 1,
+        "teamName": "Batch 13",
+        "companyName": "Fit",
+        "totalRuns": 13,
+        "extras": 1,
+        "wides": 0,
+        "noBalls": 1,
+        "wickets": 0,
+        "eco": 3.25
+    },
+    {
+        "bowlerId": 8,
+        "name": "99 player",
+        "teamId": 5,
+        "teamName": "99X Team",
+        "companyName": "99X",
+        "totalRuns": 4,
+        "extras": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "wickets": 0,
+        "eco": 2
+    }
+]
+
+----------------------------- Get Bowler summary By Bowler Id -----------------------------
+
+http://localhost:3000/api/bowler/getBowlerById/1
+Type : Get
+Response :
+
+{
+    "bowlerId": 1,
+    "name": "Nimesha",
+    "teamId": 1,
+    "teamName": "Batch 13",
+    "companyName": "Fit",
+    "totalRuns": 13,
+    "extras": 1,
+    "wides": 0,
+    "noBalls": 1,
+    "wickets": 0,
+    "eco": 3.25
+}
+
+----------------------------- Get Match Summary By Match Id -----------------------------
+
+http://localhost:3000/api/bowler/getSummaryByMatchId/1
+Type : Get
+Response :
+
+[
+    {
+        "teamId": 2,
+        "teamName": "Arimac Team",
+        "companyName": "Arimac",
+        "total": 13,
+        "extras": 1,
+        "wickets": 0,
+        "overs": 1.2,
+        "battingTeamId": 1,
+        "isLive": 1
+    },
+    {
+        "teamId": 1,
+        "teamName": "Batch 13",
+        "companyName": "Fit",
+        "total": 26,
+        "extras": 0,
+        "wickets": 0,
+        "overs": 1.2,
+        "battingTeamId": 1,
+        "isLive": 1
+    }
+]
+
+----------------------------- Get Live Match By Ground -----------------------------
+
+http://localhost:3000/api/bowler/getMatchByGround/1/1
+
+1 st param => Ground Id
+2 st param => isLive ( 1 for live )
+
+Type : Get
+Response :
+
+[
+    {
+        "teamId": 2,
+        "teamName": "Arimac Team",
+        "companyName": "Arimac",
+        "total": 13,
+        "extras": 1,
+        "wickets": 0,
+        "overs": 1.2,
+        "battingTeamId": 1,
+        "isLive": 1
+    },
+    {
+        "teamId": 1,
+        "teamName": "Batch 13",
+        "companyName": "Fit",
+        "total": 26,
+        "extras": 0,
+        "wickets": 0,
+        "overs": 1.2,
+        "battingTeamId": 1,
+        "isLive": 1
+    }
+]
+
+
+----------------------------- New Ball And Score Update -----------------------------
+
+http://localhost:3000/api/bowler/addNewBall
+
+Type : POST
+
+Pay Load :
+
+{
+  "bowler": {
+    "bowlingTeamId": 5,
+    "battingTeamId": 4,
+    "matchId": 2,
+    "bowlerId": 8,
+    "runs": 6,
+    "extras": 0,
+    "currentBall": 0.3,
+    "over": 0.3,
+    "isValidBall": 1,
+    "isNoBall": 0,
+    "isWide": 0,
+    "isWicket": 0,
+    "isRunOut":0
+  },
+  "batting": {
+    "teamId": 4,
+    "matchId": 2,
+    "playerId": 7,
+    "runs": 6,
+    "inningId": 1,
+    "isSix": 1,
+    "isFour": 0,
+    "isDot": 0
+  }
+}
+
+Response :
+
+Added successfully
+
+
+----------------------------- Get Score -----------------------------
+
+http://localhost:3000/api/bowler/getScore
+
+Type : POST
+
+Pay Load :
+
+{
+"matchId": 2,
+"playerId":7,
+"teamId":4,
+"bowlerId":8
+}
+
+Description :
+
+marchId => Current Match Id
+playerId => Current Batsman Id
+teamId => Bowling Team Id
+bowlerId => Bowler Id
+
+
+Response :
+
+{
+    "playerScore": [
+        6,
+        2
+    ],
+    "matchResult": [
+        {
+            "teamId": 4,
+            "teamName": "Creative Solutuion Team ",
+            "companyName": "Creative Solutions",
+            "total": 12,
+            "extras": 0,
+            "wickets": 0,
+            "overs": 0.4,
+            "battingTeamId": 4,
+            "isLive": 1
+        }
+    ],
+    "bowlerResult": {
+        "bowlerId": 8,
+        "name": "99 player",
+        "teamId": 5,
+        "teamName": "99X Team",
+        "companyName": "99X",
+        "totalRuns": 12,
+        "extras": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "wickets": 0,
+        "eco": 3
+    }
+}

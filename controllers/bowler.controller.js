@@ -116,21 +116,17 @@ controller.getScore = function (req) {
     const def = Q.defer();
     bowlerService.getScore(req.body.matchId, req.body.playerId).then((result) => {
         var list = [];
+        var model = {};
         for (var i = 0; i < result.length; i++) {
             list.push(result[i].runs)
         }
+        model.playerScore = list;
+        bowlerService.getMatchSummary(req.body.matchId, req.body.teamId).then((result) => {
 
-        bowlerService.getMatchSummary(req.body.matchId, req.body.teamId).then((matchResult) => {
+            model.matchResult = result;
+            bowlerService.getBowlerById(req.body.bowlerId,req.body.matchId).then((result) => {
 
-
-            bowlerService.getBowlerById(req.body.bowlerId,req.body.matchId).then((bowlerResult) => {
-
-
-                var model = {
-                    playerScore : list,
-                    matchResult : matchResult[0],
-                    bowlerResult : bowlerResult[0]
-                };
+                model.bowlerResult = result;
 
                 def.resolve(model);
             })

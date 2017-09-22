@@ -16,7 +16,7 @@ var liveController = require('../../controllers/live.controller');
 
 });*/
 
-router.get('/getMatchByGround/:id/:isLive',function(req,res){
+router.get('/getMatchByGround/:id',function(req,res){
 
     liveController.getMatchByGround(req).then(function(result){
         res.send(result);
