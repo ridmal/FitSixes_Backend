@@ -81,6 +81,22 @@ controller.getAllMatches = function () {
   return def.promise;
 };
 
+controller.getRecentMatchDetails = function () {
+  const def = Q.defer();
+
+
+  matchService.getRecentMatches().then((result) => { 
+    def.resolve(result);
+  })
+    .catch((error) => {
+      def.reject(error);
+    });
+
+  return def.promise;
+};
+
+
+
 controller.matchOverallInfoById = function (macthId) {
   const def = Q.defer();
 
