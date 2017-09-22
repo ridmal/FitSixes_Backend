@@ -78,7 +78,7 @@ service.getSummaryByMatchId = function (id){
 
 service.getMatchSummaryByMatchId = function (id){
     const def = Q.defer();
-    const query = `SELECT t.teamId, t.teamName, t.companyName, SUM(b.runs) AS total, SUM(b.extras) AS extras, (SUM(b.isWicket) + SUM(b.isRunOut)) AS wickets, m.currentOvers AS overs, m.battingTeamId, m.isLive FROM bowlingscore b, teams t, matches m WHERE b.battingTeamId = t.teamId AND m.matchId = b.matchId AND b.matchId = ${id} GROUP BY b.bowlingTeamId`;
+    const query = `SELECT t.teamId, t.teamName, t.companyName, SUM(b.runs) AS total, SUM(b.extras) AS extras, ( SUM(b.isWicket) + SUM(b.isRunOut) ) AS wickets, m.currentOvers AS overs, m.battingTeamId, m.isLive FROM bowlingscore b, teams t, matches m WHERE b.battingTeamId = t.teamId AND m.matchId = b.matchId AND b.matchId = ${id} GROUP BY b.bowlingTeamId,t.teamId,t.teamName,t.companyName,m.currentOvers,m.battingTeamId,m.isLive`;
     databaseService.selectQuery(query)
         .then((results) => {
             def.resolve(results);
