@@ -1,0 +1,139 @@
+// admin routes documentation
+
+
+//=========================================== matches ========================================
+
+Get Initial information required to create a match
+
+	route - http://localhost:3000/api/match/getInitiateInfo
+	type - get
+	request body  -   none
+	response body  -
+
+					{
+					    "grounds": [
+					        {
+					            "groundId": 1,
+					            "name": "A"
+					        },
+					        {
+					            "groundId": 2,
+					            "name": "B"
+					        }
+					    ],
+					    "teams": [
+					        {
+					            "TeamID": 1,
+					            "TeamName": "Vertusa Team 1"
+					        },
+					        {
+					            "TeamID": 2,
+					            "TeamName": "Vertusa Team 2"
+					        }
+					    ]
+					}
+
+
+	       
+create a match
+
+	route - http://localhost:3000/api/match/addMatch
+	type - post
+	request body  -   
+					{
+					    "name":"VirtusaVS99x",
+					    "groundId":2,
+					    "overs":3,
+					    "balls":6,
+					    "team1Id":"123",
+					    "team2Id":"321"
+				    }
+
+	response body  - "successfully added"
+
+
+remove a match
+
+	route - http://localhost:3000/api/match/removeMatch
+	type - post
+	request body  -   
+					{
+						"matchId":1
+					}
+
+	response body  - "successfully removed"
+
+//=========================================== teams ========================================
+
+create a team
+
+	route - http://localhost:3000/api/team/addTeam
+	type - post
+	request body  -   
+					{
+						"teamName":"batch13",
+						"companyName":"batch13"
+					}
+
+	response body  - "successfully added"
+
+remove a team
+
+	route - http://localhost:3000/api/team/removeTeam
+	type - post
+	request body  -   
+					{
+						"teamId":"1"
+					}
+
+	response body  - "successfully removed"
+
+get all teams
+
+	route - http://localhost:3000/api/team/getAllTeams
+    type -get
+	request body  - none
+
+	response body  - [
+					    {
+					        "teamId": 2,
+					        "teamName": "Vertusa Team 2",
+					        "companyName": "Vertusa"
+					    },
+					    {
+					        "teamId": 3,
+					        "teamName": "Arimac Team",
+					        "companyName": "Arimac"
+					    },
+					    {
+					        "teamId": 4,
+					        "teamName": "99X Team",
+					        "companyName": "99X"
+					    }
+					]
+
+
+//=========================================== players ========================================
+
+get players by teamId
+
+	route - http://localhost:3000/api/player/getPlayersByTeamId
+    type - post
+	request body  - {
+						"teamId":3
+					}
+
+	response body  - "successfully added"
+
+
+add players to a team
+
+	route - http://localhost:3000/api/player/addPlayers
+    type - post
+	request body  - {
+						"teamId":"1",
+						"players":[ "Lasal", "Damith", "Ridmal" ]
+					}
+
+	response body  - "successfully added"
+

@@ -26,7 +26,7 @@ router.get('/getInitiateInfo',function(req,res){ // get all teams
 
 });
 
-router.post('/addMatch',function(req,res){ // add a tplayer for perticular team.
+router.post('/createMatch',function(req,res){ // add a tplayer for perticular team.
  matchController.addMatch(req.body).then(function(result){
     res.send(result);
   }).catch(

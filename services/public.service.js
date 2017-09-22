@@ -4,7 +4,7 @@ const databaseService = require('../utils/database.service');
 const service = {};
 // table --> user 
 
-service.getLiveMatches= function (args) { // get players for perticular team
+service.getPastMatches= function (args) { // get players for perticular team
   const def = Q.defer();
   const query = `
                 
