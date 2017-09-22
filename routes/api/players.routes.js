@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var playerController = require('../../controllers/player.controller');
 
-router.post('/getPlayers',function(req,res){ // get players for each team.
+router.post('/getPlayersByTeamId',function(req,res){ // get players for each team.
   playerController.getPlayers(req.body).then(function(result){
     res.send(result);
   }).catch(
