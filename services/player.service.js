@@ -9,9 +9,6 @@ service.getPlayers= function (args) { // get players for perticular team
   const query = `SELECT * FROM players WHERE TeamID = ${args.teamId}`;
   databaseService.selectQuery(query)
     .then((results) => {
-    //   if (results.length !== 0) {
-    //       deferred.resolve(results);
-    //         }
        def.resolve(results);
           })
     .catch((error) => {
@@ -20,10 +17,43 @@ service.getPlayers= function (args) { // get players for perticular team
 
   return def.promise;
 };
-service.addPlayer = function (args) { // add player 
+
+service.addPlayers = function (args) { // add player 
+
+
+  var values = new Array();
+  var player;
+  var values_str='';
+  
+  //console.log(args.players.length);
+
+  for (var i = 0, len = args.players.length; i < len; i++) {
+   /* console.log(args.teamId);
+    console.log(args.players[i]);
+    player= new Object();
+
+    player.teamId=args.teamId;
+    player.name=args.players[i];
+    console.log(player);
+    values.push(player); */
+
+        if(i<args.players.length-1){
+         values_str = values_str + '("' + args.teamId +'","' + args.players[i] + '"),';
+        }
+
+        if(i==args.players.length-1){
+         values_str = values_str + '("' + args.teamId +'","' + args.players[i] + '")';
+        }
+
+
+  }
+
   const def = Q.defer();
-  const query = `INSERT INTO players (TeamID,Name,Age) VALUES ('${args.teamId}', '${args.name}','${args.age}')`;
-  databaseService.addQuery(query)
+  const query = `INSERT INTO players (teamId, name) VALUES `+values_str;
+
+  console.log(values);
+
+  databaseService.bulkInsert(query,values)
     .then((results) => {
        def.resolve(results);
           })
@@ -32,5 +62,6 @@ service.addPlayer = function (args) { // add player
     });
 
   return def.promise;
+
 };
 module.exports = service;

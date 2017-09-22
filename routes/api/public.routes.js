@@ -26,11 +26,10 @@ router.get('/getTeams',function(req,res){ // get all teams
   publicController.getTeams().then(function(result){
 
   	var teamId_temp=-1;
-  	console.log(result);
 
   	for (var i = 0, len = result.length; i < len; i++) {
 
-	      if((i==0)&& (teamId_temp!=result[i].teamId)){
+	      if((i==0)&& (teamId_temp!=result[i].teamId)){ 
 	      		team = new Object();
 	            playes_array = new Array();
 	  			team.teamId=result[i].teamId;

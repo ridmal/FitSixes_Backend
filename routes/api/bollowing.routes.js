@@ -78,5 +78,15 @@ router.post('/addNewBall',function(req,res){ // add a tplayer for perticular tea
     );
 });
 
+router.post('/getScore',function(req,res){
+
+    bowler.getScore(req).then(function(result){
+        res.send(result);
+    }).catch(
+        function(error){
+            res.send(error);
+        }
+    );
+});
 
 module.exports = router;

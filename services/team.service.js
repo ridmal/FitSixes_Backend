@@ -9,9 +9,7 @@ service.getAllTeams= function () { // get all Teams
   const query = `SELECT * FROM teams`;
   databaseService.selectQuery(query)
     .then((results) => {
-    //   if (results.length !== 0) {
-    //       deferred.resolve(results);
-    //         }
+         
        def.resolve(results);
           })
     .catch((error) => {
@@ -20,9 +18,12 @@ service.getAllTeams= function () { // get all Teams
 
   return def.promise;
 };
+
 service.addTeam = function (args) { // add team
   const def = Q.defer();
-  const query = `INSERT INTO teams (TeamName, CompanyName,Rank) VALUES ('${args.tname}', '${args.cname}','${args.rank}')`;
+  const query = `INSERT INTO teams (TeamName, CompanyName) VALUES ('${args.tname}', '${args.cname}')`;
+
+  
   databaseService.addQuery(query)
     .then((results) => {
        def.resolve(results);
@@ -37,10 +38,38 @@ service.getTeamDetails = function (args) { // add team
   const def = Q.defer();
   const query = `SELECT * FROM teams where teamId = ${args.teamId}`;
   databaseService.selectQuery(query)
-    .then((results) => {
     //   if (results.length !== 0) {
     //       deferred.resolve(results);
     //         }
+    .then((results) => {
+       def.resolve(results);
+          })
+    .catch((error) => {
+      def.reject(error);
+    });
+
+  return def.promise;
+};
+
+service.removeTeam = function (teamId) { // add team
+  const def = Q.defer();
+  const query1 = `DELETE FROM teams WHERE teamId=`+ teamId;
+
+  
+  databaseService.deleteQuery(query1)
+    .then((results) => {
+       def.resolve(results);
+          })
+    .catch((error) => {
+      def.reject(error);
+    });
+
+
+  const query2 = `DELETE FROM players WHERE teamId=`+ teamId;
+
+  
+  databaseService.deleteQuery(query2)
+    .then((results) => {
        def.resolve(results);
           })
     .catch((error) => {

@@ -17,15 +17,13 @@ controller.getPlayers = function (req) {
 
   return def.promise;
 };
-controller.addPlayer = function (req) {
-  const def = Q.defer();
-  let args = {
-    teamId:req.teamId,
-    name:req.name,
-    age:req.age
-  }
 
-  playerService.addPlayer(args).then((result) => { 
+
+controller.addPlayers = function (req) {
+  const def = Q.defer();
+  
+
+  playerService.addPlayers(req).then((result) => { 
     def.resolve(result);
   })
     .catch((error) => {

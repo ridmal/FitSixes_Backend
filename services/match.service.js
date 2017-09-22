@@ -59,12 +59,27 @@ service.getMatchDetails= function (args) { // get all Teams
        def.resolve(results);
           })
     .catch((error) => {
+      def.reject(error);
+    });
 
+  return def.promise;
+};
+
+service.removeMatch = function (matchId) { // add player 
+  const def = Q.defer();
+  const query = `DELETE FROM matches WHERE matchId=`+ matchId;
+  
+  databaseService.deleteQuery(query)
+    .then((results) => {
+       def.resolve(results);
+          })
+    .catch((error) => {
       console.log(error);
       def.reject(error);
     });
   return def.promise;
 };
+
 
 
 
