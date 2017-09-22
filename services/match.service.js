@@ -64,7 +64,19 @@ service.getAllMatches = function () { // add player
 
   return def.promise;
 };
+service.getRecentMatches = function () { // add player 
+  const def = Q.defer();
+  const query = `SELECT * FROM matches WHERE isLive = 0`;
+  databaseService.selectQuery(query)
+    .then((results) => {
+       def.resolve(results);
+          })
+    .catch((error) => {
+      def.reject(error);
+    });
 
+  return def.promise;
+};
 
 service.getMatchDetails= function (args) { // get all Teams
   const def = Q.defer();
