@@ -61,7 +61,8 @@ controller.getSummaryByMatchId = function (req) {
 controller.addNewBall = function (bowler, batting) {
     const def = Q.defer();
     let args = {
-        teamId: bowler.teamId,
+        bowlingTeamId: bowler.bowlingTeamId,
+        battingTeamId: bowler.battingTeamId,
         matchId: bowler.matchId,
         bowlerId: bowler.bowlerId,
         runs: bowler.runs,
@@ -122,13 +123,13 @@ controller.getScore = function (req) {
         bowlerService.getMatchSummary(req.body.matchId, req.body.teamId).then((matchResult) => {
 
 
-            bowlerService.getBowlerById(req.body.bowlerId).then((bowlerResult) => {
+            bowlerService.getBowlerById(req.body.bowlerId,req.body.matchId).then((bowlerResult) => {
 
 
                 var model = {
                     playerScore : list,
-                    matchResult : matchResult,
-                    bowlerResult : bowlerResult
+                    matchResult : matchResult[0],
+                    bowlerResult : bowlerResult[0]
                 };
 
                 def.resolve(model);

@@ -72,37 +72,37 @@ controller.getMatchDetails = function (req) {
   }
   matchService.getMatchDetails(args).then((result) => { 
     let team1args = {
-      teamId : result.team1Id
+      teamId : result[0].team1Id
     }
     let team2args = {
-      teamId:result.team2Id
+      teamId:result[0].team2Id
     }
     let match = {
-      overs : result.over,
-      balls : result.balls,
+      overs : result[0].overs,
+      balls : result[0].balls,
       teams : []
     }
-    def.resolve(result);
-    Q.all([teamService.getTeamDetails(team1args),playerService.getPlayers(team1args)]).then(
+    Q.all([teamService.getTeamDetails(team1args),playerService.getPlayers(team1args),teamService.getTeamDetails(team2args),playerService.getPlayers(team2args)]).then(
       (res)=>{
-        let team = {
-          teamId : res[0].teamId,
-          teamName : res[0].teamName,
-          players :[]
-        }
-        for(let i=0;i<res[1].length;i++){
-          let player = {
-            playerId : res[1].playerId,
-            playerName : res[1].playerName
-          }
-          players.add(player);
-        }
-        teams.add(team);
+        let team1 = {
+           teamId : res[0][0].teamId,
+           teamName : res[0][0].teamName,
+           players :res[1]
+         }
+           let team2 = {
+           teamId : res[2][0].teamId,
+           teamName : res[2][0].teamName,
+           players :res[3]
+         }
+         match.teams.push(team1); 
+         match.teams.push(team2);  
+        def.resolve(match);
       }
     ).catch(()=>{
         def.reject(error);
     }
     );
+ 
   })
     .catch((error) => {
       def.reject(error);
