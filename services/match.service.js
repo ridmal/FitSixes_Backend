@@ -104,7 +104,7 @@ service.matchOverallInfoById= function (matchId) { // get all Teams
 service.getBowlingPlayersInfo = function (matchId,teamId) { // add player 
   const def = Q.defer();
  
-         query = 'SELECT players.playerId,players.name,T1.runs,T1.wides,T1.noBalls,T1.wickets FROM  players INNER JOIN (SELECT bowlerId,SUM(runs) as runs ,SUM(isWide) as wides,SUM(isNoBall) as noBalls,SUM(isWicket) as wickets FROM bowlingscore WHERE  matchId ='+matchId +' AND bowlingTeamId ='+ teamId +' GROUP by bowlerId) AS T1 ON players.playerId = T1.bowlerId';
+         query = 'SELECT players.playerId,players.name,T2.runs,T2.wides,T2.noBalls,T2.wickets FROM  players LEFT JOIN (SELECT T1.bowlerId,players.name,T1.runs,T1.wides,T1.noBalls,T1.wickets FROM  players INNER JOIN (SELECT bowlerId,SUM(runs) as runs ,SUM(isWide) as wides,SUM(isNoBall) as noBalls,SUM(isWicket) as wickets FROM bowlingscore WHERE  matchId ='+matchId +' AND bowlingTeamId ='+ teamId +' GROUP by bowlerId) AS T1 ON players.playerId = T1.bowlerId)  AS T2 ON players.playerId = T2.bowlerId WHERE players.teamId ='+ teamId;
         databaseService.selectQuery(query)
           .then((results) => {
 
@@ -120,7 +120,23 @@ service.getBowlingPlayersInfo = function (matchId,teamId) { // add player
 service.getBattingPlayersInfo = function (matchId,teamId) { // add player 
   const def = Q.defer();
 
-         query = 'SELECT T1.playerId,players.name,T1.runs,T1.sixes,T1.fours,T1.dots FROM  players INNER JOIN (SELECT playerId,SUM(runs) as runs ,SUM(isSix) as sixes,SUM(isFour) as fours,SUM(isDot) as dots FROM battingscore WHERE  matchId ='+matchId +' AND teamId ='+ teamId +'  GROUP by playerId) AS T1 ON players.playerId = T1. playerId';
+         query = 'SELECT players.playerId,players.name,T2.runs,T2.sixes,T2.fours,T2.dots FROM  players LEFT JOIN (SELECT T1.playerId,players.name,T1.runs,T1.sixes,T1.fours,T1.dots FROM  players INNER JOIN (SELECT playerId,SUM(runs) as runs ,SUM(isSix) as sixes,SUM(isFour) as fours,SUM(isDot) as dots FROM battingscore WHERE  matchId ='+matchId +' AND teamId ='+ teamId +' GROUP by playerId) AS T1 ON players.playerId = T1. playerId) AS T2 ON players.playerId = T2. playerId WHERE players.teamId ='+ teamId ;
+        databaseService.selectQuery(query)
+          .then((results) => {
+
+         def.resolve(results);
+                })
+          .catch((error) => {
+            def.reject(error);
+          });    
+
+  return def.promise;
+};
+
+service.getBattingInfo = function (matchId,teamId) { // add player 
+  const def = Q.defer();
+
+         query = 'SELECT battingTeamId, SUM(runs) as score,MAX(currentBall) as overs FROM bowlingscore WHERE matchId = '+matchId +' AND battingTeamId ='+ teamId+' GROUP BY battingTeamId';
         databaseService.selectQuery(query)
           .then((results) => {
 
