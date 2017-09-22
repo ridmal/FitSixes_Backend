@@ -19,14 +19,32 @@ controller.getMatchByGroundId = function (groundId) {
 
 controller.getMatchByGround = function (req) {
     const def = Q.defer();
-    liveService.getMatchByGround(req.params.id, req.params.isLive).then((result) => {
-        def.resolve(result);
+    liveService.getMatchByGround(req.params.id, 1).then((result) => {
+        var model = {"desc": "No match"};
+        if (result.length == 1) {
+            model = result[0];
+            model.runRate = getRunrate(result[0].overs,result[0].balls,result[0].total)
+        }
+        def.resolve(model);
     })
         .catch((error) => {
             def.reject(error);
         });
     return def.promise;
 };
+
+function getRunrate(over,ballPerOver,runs){
+    over = over+ "";
+    var split = over.split(".");
+    if (split.length == 1)
+        split.push(0);
+    var balls = parseInt(split[0]) * ballPerOver + parseInt(split[1]);
+    var runRate = ((runs / balls ) * ballPerOver).toFixed(1);
+    if (runRate == 'Infinity')
+        runRate = 0;
+    return runRate;
+}
+
 
 controller.getAllLiveScores = function () {
     const def = Q.defer();

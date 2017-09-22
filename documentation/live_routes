@@ -1,0 +1,56 @@
+
+
+----------------------------- Get Live Match Score -----------------------------
+http://localhost:3000/api/live/getMatchByGround/1
+First Param => Ground Id
+Type : Get
+Response :
+
+{
+    "teamId": 1,
+    "teamName": "Batch 13",
+    "companyName": "Fit",
+    "total": 26,
+    "extras": 0,
+    "wickets": 0,
+    "overs": 1.2,
+    "battingTeamId": 1,
+    "balls": 6,
+    "runRate": "19.5"
+}
+
+----------------------------- Get All Live Matches -----------------------------
+http://localhost:3000/api/live/getAllLiveScores
+Type : Get
+Response :
+
+{
+    "groundA": [
+        {
+            "teamId": 1,
+            "teamName": "Batch 13",
+            "companyName": "Fit",
+            "total": 26,
+            "extras": 0,
+            "wickets": 0,
+            "overs": 1.2,
+            "battingTeamId": 1,
+            "balls": 6
+        }
+    ],
+    "groundB": [
+        {
+            "teamId": 4,
+            "teamName": "Creative Solutuion Team ",
+            "companyName": "Creative Solutions",
+            "total": 4,
+            "extras": 0,
+            "wickets": 0,
+            "overs": 0,
+            "battingTeamId": 4,
+            "balls": 6
+        }
+    ],
+    "groundC": null,
+    "groundD": null
+}
