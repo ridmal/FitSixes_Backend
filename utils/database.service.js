@@ -3,20 +3,20 @@ const Q = require('q');
 const service = {};
 
 var pool = mysql.createPool({
-    /*connectionLimit: 4,
+    connectionLimit: 4,
     host: "in-cdbr-azure-south-c.cloudapp.net",
     user: "b8c58532399431",
     password: "0cc0b94c",
     database: "fitsixes",
     port: "3306",
     ssl: true,
-    waitForConnections: true*/
+    waitForConnections: true
 
-    host: "127.0.0.1",
-     user: "root",
-     password: "",
-     database: "fitsixes",
-     port:"3306"
+    // host: "127.0.0.1",
+    //  user: "root",
+    //  password: "",
+    //  database: "fitsixes",
+    //  port:"3306"
 });
 
 service.selectQuery = function (query) { // select query
