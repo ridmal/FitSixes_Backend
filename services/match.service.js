@@ -39,7 +39,7 @@ service.getTeams= function () { // get all Teams
 
 service.addMatch = function (args) { // add player 
   const def = Q.defer();
-  const query = `INSERT INTO matches (name,groundId,overs,balls,team1Id,team2Id) VALUES ('${args.name}', '${args.groundId}','${args.overs}','${args.balls}', '${args.team1Id}','${args.team2Id}')`;
+  const query = `INSERT INTO matches (name,groundId,overs,balls,team1Id,team2Id,roundId) VALUES ('${args.name}', '${args.groundId}','${args.overs}','${args.balls}', '${args.team1Id}','${args.team2Id}',1)`;
   databaseService.addQuery(query)
     .then((results) => {
        def.resolve(results);
