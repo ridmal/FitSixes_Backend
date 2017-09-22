@@ -174,7 +174,7 @@ service.getMatchByMatchId = function (id){
 
 service.updateMatch = function (args){
     const def = Q.defer();
-    const query = `UPDATE matches SET currentOvers = ${args.currentOvers}, 1stScore = ${args.firstScore}, team1Wicket = ${args.teamOneWicket}, 2ndScore = ${args.secondScore}, team2Wicket = ${args.teamTwoWickets}, wonTeamId = ${args.wonTeamId} WHERE matchId = ${args.matchId}`;
+    const query = `UPDATE matches SET currentOvers = ${args.currentOvers}, 1stScore = ${args.firstScore}, team1Wicket = ${args.teamOneWicket}, 2ndScore = ${args.secondScore}, team2Wicket = ${args.teamTwoWickets}, wonTeamId = ${args.wonTeamId}  WHERE matchId = ${args.matchId}`;
     databaseService.updateQuery(query)
         .then((results) => {
             def.resolve(results);

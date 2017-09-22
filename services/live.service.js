@@ -34,7 +34,7 @@ service.getMatchByGround = function (id,isLive){
 
 service.getAllLiveScores = function (id){
     const def = Q.defer();
-    const query = `SELECT t.teamId, t.teamName, t.companyName, SUM(b.runs) AS total, SUM(b.extras) AS extras, ( SUM(b.isWicket) + SUM(b.isRunOut) ) AS wickets, m.currentOvers AS overs, m.battingTeamId , m.balls FROM bowlingscore b, teams t, matches m WHERE m.groundId = ${id} AND m.isLive = 1 AND b.battingTeamId = t.teamId AND m.matchId = b.matchId GROUP BY b.bowlingTeamId`;
+    const query = `SELECT t.teamId, t.teamName, t.companyName,m.name, SUM(b.runs) AS total, SUM(b.extras) AS extras, ( SUM(b.isWicket) + SUM(b.isRunOut) ) AS wickets, m.currentOvers AS overs, m.battingTeamId , m.balls FROM bowlingscore b, teams t, matches m WHERE m.groundId = ${id} AND m.isLive = 1 AND b.battingTeamId = t.teamId AND m.matchId = b.matchId GROUP BY b.bowlingTeamId`;
     databaseService.selectQuery(query)
         .then((results) => {
             def.resolve(results);
