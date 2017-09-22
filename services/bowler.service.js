@@ -8,7 +8,7 @@ const service = {};
 
 service.getAllBowlers= function () { // get all Teams
     const def = Q.defer();
-    const query = 'SELECT p.name, t.teamName, t.companyName, SUM(b.runs) AS runs, SUM(b.extras) AS extras, SUM(b.isValidBall) AS validBalls, SUM(b.isNoBall) AS noBalls, SUM(b.isWide) AS wideBalls, SUM(b.isWicket) AS wickets FROM bowlingscore b, players p, teams t WHERE b.bowlerId = p.playerId AND p.teamId = t.teamId GROUP BY p.playerId';
+    const query = 'SELECT p.name, t.teamName, t.companyName, SUM(b.runs) AS runs, SUM(b.extras) AS extras, SUM(b.isValidBall) AS validBalls, SUM(b.isNoBall) AS noBalls, SUM(b.isWide) AS wideBalls, SUM(b.isWicket) AS wickets , (SUM(b.runs) / SUM(b.isValidBall)) AS eco FROM bowlingscore b, players p, teams t WHERE b.bowlerId = p.playerId AND p.teamId = t.teamId GROUP BY p.playerId';
     databaseService.selectQuery(query)
         .then((results) => {
         def.resolve(results);
@@ -23,7 +23,7 @@ service.getAllBowlers= function () { // get all Teams
 service.getBowlerById = function (id){
 
     const def = Q.defer();
-    const query = `SELECT p.name, t.teamName, t.companyName, SUM(b.runs) AS runs, SUM(b.extras) AS extras, SUM(b.isValidBall) AS validBalls, SUM(b.isNoBall) AS noBalls, SUM(b.isWide) AS wideBalls, SUM(b.isWicket) AS wickets FROM bowlingscore b, players p, teams t WHERE b.bowlerId = ${id} AND b.bowlerId = p.playerId AND p.teamId = t.teamId GROUP BY p.playerId`;
+    const query = `SELECT p.name, t.teamName, t.companyName, SUM(b.runs) AS runs, SUM(b.extras) AS extras, SUM(b.isValidBall) AS validBalls, SUM(b.isNoBall) AS noBalls, SUM(b.isWide) AS wideBalls, SUM(b.isWicket) AS wickets, (SUM(b.runs) / SUM(b.isValidBall)) AS eco FROM bowlingscore b, players p, teams t WHERE b.bowlerId = ${id} AND b.bowlerId = p.playerId AND p.teamId = t.teamId GROUP BY p.playerId`;
     databaseService.selectQuery(query)
         .then((results) => {
         def.resolve(results);

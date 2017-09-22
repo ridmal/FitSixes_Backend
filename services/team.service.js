@@ -34,6 +34,22 @@ service.addTeam = function (args) { // add team
 
   return def.promise;
 };
+service.getTeamDetails = function (args) { // add team
+  const def = Q.defer();
+  const query = `SELECT * FROM teams where teamId = ${args.teamId}`;
+  databaseService.selectQuery(query)
+    //   if (results.length !== 0) {
+    //       deferred.resolve(results);
+    //         }
+    .then((results) => {
+       def.resolve(results);
+          })
+    .catch((error) => {
+      def.reject(error);
+    });
+
+  return def.promise;
+};
 
 service.removeTeam = function (teamId) { // add team
   const def = Q.defer();
@@ -59,7 +75,6 @@ service.removeTeam = function (teamId) { // add team
     .catch((error) => {
       def.reject(error);
     });
-  
 
   return def.promise;
 };
