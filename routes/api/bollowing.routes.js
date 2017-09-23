@@ -111,4 +111,14 @@ router.post('/endMatch',function(req,res){ // add a tplayer for perticular team.
     );
 });
 
+router.post('/startMatch',function(req,res){ // add a tplayer for perticular team.
+    bowler.startMatch(req).then(function(result){
+        res.send(result);
+    }).catch(
+        function(error){
+            res.send(error);
+        }
+    );
+});
+
 module.exports = router;
