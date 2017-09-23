@@ -141,6 +141,20 @@ controller.getBattingPlayersInfo = function (macthId,teamId) {
   return def.promise;
 };
 
+controller.getBattingInfo = function (macthId,teamId) {
+  const def = Q.defer();
+
+  matchService.getBattingInfo(macthId,teamId).then((result) => { 
+
+    def.resolve(result);
+  })
+    .catch((error) => {
+      def.reject(error);
+    });
+
+  return def.promise;
+};
+
 
 controller.getMatchDetails = function (req) {
   const def = Q.defer();
