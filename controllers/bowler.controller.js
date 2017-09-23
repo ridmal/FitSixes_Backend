@@ -257,4 +257,24 @@ controller.endMatch = function (req) {
 };
 
 
+controller.startMatch = function (req) {
+    const def = Q.defer();
+
+    bowlerService.setOffMatches(req.body.groundId).then(() => {
+
+        bowlerService.setOnLine(req.body.groundId,req.body.matchId).then((result) => {
+            def.resolve(result);
+        })
+            .catch((error) => {
+                def.reject(error);
+            });
+
+    })
+        .catch((error) => {
+            def.reject(error);
+        });
+
+    return def.promise;
+};
+
 module.exports = controller;

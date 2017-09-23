@@ -185,4 +185,28 @@ service.updateMatch = function (args){
     return def.promise;
 };
 
+service.setOffMatches = function (groundId){
+    const def = Q.defer();
+    const query = `UPDATE matches m SET m.isLive = 0 WHERE m.groundId = ${groundId}`;
+    databaseService.updateQuery(query)
+        .then((results) => {
+            def.resolve(results);
+        })
+        .catch((error) => {
+            def.reject(error);
+        });
+    return def.promise;
+};
+service.setOnLine = function (groundId,matchId){
+    const def = Q.defer();
+    const query = `UPDATE matches m SET m.isLive = 1 WHERE m.groundId = ${groundId} AND m.matchId = ${matchId}`;
+    databaseService.updateQuery(query)
+        .then((results) => {
+            def.resolve(results);
+        })
+        .catch((error) => {
+            def.reject(error);
+        });
+    return def.promise;
+};
 module.exports = service;
