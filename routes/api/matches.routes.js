@@ -117,18 +117,29 @@ router.get('/matchOverallInfoById/:id',function(req,res){ //
                 inning.id=1;
 
                                         matchController.getBattingPlayersInfo(result.matchId,result.curBattingTeam.id).then(function(result3){
-                                          console.log(result3);
+                                          
                                           first_ining_batting_team.teamName = result.curBattingTeam.name;
                                           first_ining_batting_team.teamId = result.curBattingTeam.id;
                                           first_ining_batting_team.players = result3;
 
                                           inning.battingTeam =first_ining_batting_team;
 
+                                                      matchController.getBattingInfo(result.matchId,result.curBattingTeam.id).then(function(result4){
+                        
+                                                                  inning.score= result4[0].score;
+                                                                  inning.overs= result4[0].overs;
 
 
-                                          innings_array.push(inning);
-                                          result.Innings = innings_array;
-                                          res.send(result);
+                                                                  innings_array.push(inning);
+                                                                  result.Innings = innings_array;
+                                                                  res.send(result);
+                                                        }).catch(
+                                                          function(error){
+                                                            res.send(error);
+                                                          }
+                                                        );
+
+                                         
                               
 
                                         }).catch(
@@ -154,12 +165,14 @@ router.get('/matchOverallInfoById/:id',function(req,res){ //
                 inning.bowlingTeam =first_ining_bowling_team;
 
                                         matchController.getBattingPlayersInfo(result.matchId,result.curBowlingTeam.id).then(function(result3){
-                                          console.log(result3);
+                                       
                                           first_ining_batting_team.teamName = result.curBowlingTeam.name;
                                           first_ining_batting_team.teamId = result.curBowlingTeam.id;
                                           first_ining_batting_team.players = result3;
                                           inning.battingTeam =first_ining_batting_team;
                                           inning.id=1;
+
+
 
                                           innings_array.push(inning);
 
@@ -169,41 +182,49 @@ router.get('/matchOverallInfoById/:id',function(req,res){ //
                                           inning.bowlingTeam= new Object();
 
 
-                                                          matchController.getBowlingPlayersInfo(result.matchId,result.curBowlingTeam.id).then(function(result2){
-                                                              second_ining_bowling_team.teamName = result.curBowlingTeam.name;
-                                                              second_ining_bowling_team.teamId = result.curBowlingTeam.id;
-                                                              second_ining_bowling_team.players = JSON.parse(JSON.stringify(result2));
-                                                              inning.bowlingTeam =second_ining_bowling_team;
+                                                                          matchController.getBowlingPlayersInfo(result.matchId,result.curBowlingTeam.id).then(function(result5){
+                                                                              second_ining_bowling_team.teamName = result.curBowlingTeam.name;
+                                                                              second_ining_bowling_team.teamId = result.curBowlingTeam.id;
+                                                                              second_ining_bowling_team.players = JSON.parse(JSON.stringify(result5));
+                                                                              inning.bowlingTeam =second_ining_bowling_team;
 
-                                                                                      matchController.getBattingPlayersInfo(result.matchId,result.curBattingTeam.id).then(function(result3){
-                                                                                        console.log(result3);
-                                                                                        second_ining_bowling_team_ining_batting_team.teamName = result.curBattingTeam.name;
-                                                                                        second_ining_bowling_team_ining_batting_team.teamId = result.curBattingTeam.id;
-                                                                                        second_ining_bowling_team_ining_batting_team.players = result3;
-                                                                                        inning.battingTeam =second_ining_batting_team;
-                                                                                        inning.id=2;
-                                                                                        innings_array.push(inning);
-
+                                                                                                      matchController.getBattingPlayersInfo(result.matchId,result.curBattingTeam.id).then(function(result6){
+                                                                                                       
+                                                                                                        second_ining_bowling_team_ining_batting_team.teamName = result.curBattingTeam.name;
+                                                                                                        second_ining_bowling_team_ining_batting_team.teamId = result.curBattingTeam.id;
+                                                                                                        second_ining_bowling_team_ining_batting_team.players = result6;
+                                                                                                        inning.battingTeam =second_ining_batting_team;
+                                                                                                        inning.id=2;
 
 
-                                                                                        
-                                                                                        result.Innings = innings_array;
-                                                                                        res.send(result);
-                                                                            
+                                                                                                                        matchController.getBattingInfo(result.matchId,result.curBattingTeam.id).then(function(result7){
+                                        
+                                                                                                                                  inning.score= result7[0].score;
+                                                                                                                                  inning.overs= result7[0].overs;
 
-                                                                                      }).catch(
-                                                                                        function(error){
-                                                                                          res.send(error);
-                                                                                        });
 
-                                                            }).catch(
-                                                                     function(error){
-                                                                     res.send(error);
-                                                            });
+                                                                                                                                  innings_array.push(inning);
+                                                                                                                                  result.Innings = innings_array;
+                                                                                                                                  res.send(result);
+                                                                                                                        }).catch(
+                                                                                                                          function(error){
+                                                                                                                            res.send(error);
+                                                                                                                          }
+                                                                                                                        );
 
-                                          /*
-                                          result.Innings = innings_array;
-                                          res.send(result);*/
+                                                                                            
+
+                                                                                                      }).catch(
+                                                                                                        function(error){
+                                                                                                          res.send(error);
+                                                                                                        });
+
+                                                                            }).catch(
+                                                                                     function(error){
+                                                                                     res.send(error);
+                                                                            });
+
+                                         
                               
 
                                         }).catch(
