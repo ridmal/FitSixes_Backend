@@ -36,18 +36,21 @@ DROP TABLE IF EXISTS `fitsixes`.`matches` ;
 CREATE TABLE IF NOT EXISTS `fitsixes`.`matches` (
   `matchId` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
-  `groundId` INT(11) NULL,
-  `overs` INT NULL,
-  `balls` VARCHAR(45) NULL,
-  `team1Id` INT NULL,
-  `team2Id` INT NULL,
-  `roundId` INT NULL,
-  `isLive` TINYINT(1) NULL DEFAULT 0,
-  `inningId` INT NULL,
-  `battingTeamId` INT NULL,
-  `currentOvers` FLOAT NULL,
-  `score` INT NULL,
-  `target` INT NULL,
+  `groundId` INT(11) NOT NULL,
+  `overs` INT NOT NULL,
+  `balls` INT NOT NULL,
+  `team1Id` INT NOT NULL,
+  `team2Id` INT NOT NULL,
+  `roundId` INT NOT NULL,
+  `isLive` TINYINT(1) NOT NULL DEFAULT 0,
+  `inningId` INT NULL DEFAULT 0,
+  `battingTeamId` INT NULL DEFAULT 0,
+  `currentOvers` FLOAT NULL DEFAULT 0.0,
+  `1stScore` INT NULL DEFAULT 0,
+  `team1Wicket` INT NULL DEFAULT 0,
+  `2ndScore` INT NULL DEFAULT 0,
+  `team2Wicket` INT NULL DEFAULT 0,
+  `wonTeamId` INT NULL DEFAULT 0,
   PRIMARY KEY (`matchId`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
@@ -83,41 +86,43 @@ DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
--- Table `fitsixes`.`battingScore`
+-- Table `fitsixes`.`battingscore`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `fitsixes`.`battingScore` ;
+DROP TABLE IF EXISTS `fitsixes`.`battingscore` ;
 
-CREATE TABLE IF NOT EXISTS `fitsixes`.`battingScore` (
+CREATE TABLE IF NOT EXISTS `fitsixes`.`battingscore` (
   `ballId` INT NOT NULL AUTO_INCREMENT,
   `teamId` INT NULL,
   `matchId` INT NOT NULL,
   `playerId` INT NULL,
   `runs` INT NULL,
   `inningId` INT NULL,
-  `six` TINYINT(1) NULL,
-  `four` TINYINT(1) NULL,
-  `dot` TINYINT(1) NULL,
+  `isSix` TINYINT(1) NULL,
+  `isFour` TINYINT(1) NULL,
+  `isDot` TINYINT(1) NULL,
   PRIMARY KEY (`ballId`))
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `fitsixes`.`bowlingScore`
+-- Table `fitsixes`.`bowlingscore`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `fitsixes`.`bowlingScore` ;
+DROP TABLE IF EXISTS `fitsixes`.`bowlingscore` ;
 
-CREATE TABLE IF NOT EXISTS `fitsixes`.`bowlingScore` (
+CREATE TABLE IF NOT EXISTS `fitsixes`.`bowlingscore` (
   `ballId` INT NOT NULL AUTO_INCREMENT,
-  `teamId` INT NULL,
-  `matchId` INT NULL,
-  `bowlerId` INT NULL,
-  `runs` INT NULL,
-  `extras` INT NULL,
-  `currentBall` FLOAT NULL,
-  `isValidBall` TINYINT(1) NULL DEFAULT 0,
-  `isNoBall` TINYINT(1) NULL DEFAULT 0,
-  `isWide` TINYINT(1) NULL DEFAULT 0,
-  `isWicket` TINYINT(1) NULL DEFAULT 0,
+  `bowlingTeamId` INT NOT NULL,
+  `battingTeamId` INT NOT NULL,
+  `matchId` INT NOT NULL,
+  `bowlerId` INT NOT NULL,
+  `runs` INT NOT NULL,
+  `extras` INT NOT NULL,
+  `currentBall` FLOAT NOT NULL,
+  `isValidBall` TINYINT(1) NOT NULL DEFAULT 0,
+  `isNoBall` TINYINT(1) NOT NULL DEFAULT 0,
+  `isWide` TINYINT(1) NOT NULL DEFAULT 0,
+  `isWicket` TINYINT(1) NOT NULL DEFAULT 0,
+  `isRunOut` TINYINT(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`ballId`))
 ENGINE = InnoDB;
 
@@ -164,6 +169,17 @@ COMMIT;
 
 
 -- -----------------------------------------------------
+-- Data for table `fitsixes`.`matches`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `fitsixes`;
+INSERT INTO `fitsixes`.`matches` (`matchId`, `name`, `groundId`, `overs`, `balls`, `team1Id`, `team2Id`, `roundId`, `isLive`, `inningId`, `battingTeamId`, `currentOvers`, `1stScore`, `team1Wicket`, `2ndScore`, `team2Wicket`, `wonTeamId`) VALUES (1, 'Batch13 Vs Arimac', 1, 4, 6, 1, 2, 1, 1, 1, 1, 0, 0, NULL, NULL, NULL, NULL);
+INSERT INTO `fitsixes`.`matches` (`matchId`, `name`, `groundId`, `overs`, `balls`, `team1Id`, `team2Id`, `roundId`, `isLive`, `inningId`, `battingTeamId`, `currentOvers`, `1stScore`, `team1Wicket`, `2ndScore`, `team2Wicket`, `wonTeamId`) VALUES (2, 'Creative vs 99X', 2, 4, 6, 4, 5, 1, 1, 1, 4, 0, 0, NULL, NULL, NULL, NULL);
+
+COMMIT;
+
+
+-- -----------------------------------------------------
 -- Data for table `fitsixes`.`players`
 -- -----------------------------------------------------
 START TRANSACTION;
@@ -171,6 +187,11 @@ USE `fitsixes`;
 INSERT INTO `fitsixes`.`players` (`playerId`, `teamId`, `name`, `age`) VALUES (1, 1, 'Nimesha', 20);
 INSERT INTO `fitsixes`.`players` (`playerId`, `teamId`, `name`, `age`) VALUES (2, 1, 'Ridmal', 20);
 INSERT INTO `fitsixes`.`players` (`playerId`, `teamId`, `name`, `age`) VALUES (3, 1, 'Achira', 20);
+INSERT INTO `fitsixes`.`players` (`playerId`, `teamId`, `name`, `age`) VALUES (4, 3, 'Isuru', 20);
+INSERT INTO `fitsixes`.`players` (`playerId`, `teamId`, `name`, `age`) VALUES (5, 3, 'Neranjan', 20);
+INSERT INTO `fitsixes`.`players` (`playerId`, `teamId`, `name`, `age`) VALUES (6, 3, 'Thasun', 20);
+INSERT INTO `fitsixes`.`players` (`playerId`, `teamId`, `name`, `age`) VALUES (7, 4, 'Creative player', 20);
+INSERT INTO `fitsixes`.`players` (`playerId`, `teamId`, `name`, `age`) VALUES (8, 5, '99 player', 20);
 
 COMMIT;
 
@@ -180,29 +201,31 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `fitsixes`;
-INSERT INTO `fitsixes`.`teams` (`teamId`, `teamName`, `companyName`) VALUES (1, 'Vertusa Team 1', 'Vertusa');
-INSERT INTO `fitsixes`.`teams` (`teamId`, `teamName`, `companyName`) VALUES (2, 'Vertusa Team 2', 'Vertusa');
-INSERT INTO `fitsixes`.`teams` (`teamId`, `teamName`, `companyName`) VALUES (3, 'Arimac Team', 'Arimac');
-INSERT INTO `fitsixes`.`teams` (`teamId`, `teamName`, `companyName`) VALUES (4, '99X Team', '99X');
-INSERT INTO `fitsixes`.`teams` (`teamId`, `teamName`, `companyName`) VALUES (5, 'Creative Team', 'Creative Solutions');
+INSERT INTO `fitsixes`.`teams` (`teamId`, `teamName`, `companyName`) VALUES (1, 'Batch 13', 'Fit');
+INSERT INTO `fitsixes`.`teams` (`teamId`, `teamName`, `companyName`) VALUES (2, 'Arimac Team', 'Arimac');
+INSERT INTO `fitsixes`.`teams` (`teamId`, `teamName`, `companyName`) VALUES (4, 'Creative Solutuion Team ', 'Creative Solutions');
+INSERT INTO `fitsixes`.`teams` (`teamId`, `teamName`, `companyName`) VALUES (5, '99X Team', '99X');
 
 COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `fitsixes`.`bowlingScore`
+-- Data for table `fitsixes`.`bowlingscore`
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `fitsixes`;
-INSERT INTO `fitsixes`.`bowlingScore` (`ballId`, `teamId`, `matchId`, `bowlerId`, `runs`, `extras`, `currentBall`, `isValidBall`, `isNoBall`, `isWide`, `isWicket`) VALUES (1, 1, 1, 1, 2, 0, 0.1, 1, 0, 0, 0);
-INSERT INTO `fitsixes`.`bowlingScore` (`ballId`, `teamId`, `matchId`, `bowlerId`, `runs`, `extras`, `currentBall`, `isValidBall`, `isNoBall`, `isWide`, `isWicket`) VALUES (2, 1, 1, 1, 5, 1, 0.2, 0, 1, 0, 0);
-INSERT INTO `fitsixes`.`bowlingScore` (`ballId`, `teamId`, `matchId`, `bowlerId`, `runs`, `extras`, `currentBall`, `isValidBall`, `isNoBall`, `isWide`, `isWicket`) VALUES (3, 1, 1, 1, 6, 0, 0.2, 1, 0, 0, 0);
-INSERT INTO `fitsixes`.`bowlingScore` (`ballId`, `teamId`, `matchId`, `bowlerId`, `runs`, `extras`, `currentBall`, `isValidBall`, `isNoBall`, `isWide`, `isWicket`) VALUES (4, 1, 1, 1, 0, 0, 0.3, 1, 0, 0, 1);
-INSERT INTO `fitsixes`.`bowlingScore` (`ballId`, `teamId`, `matchId`, `bowlerId`, `runs`, `extras`, `currentBall`, `isValidBall`, `isNoBall`, `isWide`, `isWicket`) VALUES (5, 1, 1, 1, 4, 0, 0.4, 1, 0, 0, 0);
-INSERT INTO `fitsixes`.`bowlingScore` (`ballId`, `teamId`, `matchId`, `bowlerId`, `runs`, `extras`, `currentBall`, `isValidBall`, `isNoBall`, `isWide`, `isWicket`) VALUES (6, 1, 1, 1, 0, 0, 0.5, 1, 0, 0, 1);
-INSERT INTO `fitsixes`.`bowlingScore` (`ballId`, `teamId`, `matchId`, `bowlerId`, `runs`, `extras`, `currentBall`, `isValidBall`, `isNoBall`, `isWide`, `isWicket`) VALUES (7, 1, 1, 1, 2, 0, 1, 1, 0, 0, 0);
-INSERT INTO `fitsixes`.`bowlingScore` (`ballId`, `teamId`, `matchId`, `bowlerId`, `runs`, `extras`, `currentBall`, `isValidBall`, `isNoBall`, `isWide`, `isWicket`) VALUES (8, 1, 1, 2, 5, 1, 0.1, 0, 1, 0, 0);
-INSERT INTO `fitsixes`.`bowlingScore` (`ballId`, `teamId`, `matchId`, `bowlerId`, `runs`, `extras`, `currentBall`, `isValidBall`, `isNoBall`, `isWide`, `isWicket`) VALUES (9, 1, 1, 2, 0, 0, 0.1, 1, 0, 0, 1);
+INSERT INTO `fitsixes`.`bowlingscore` (`ballId`, `bowlingTeamId`, `battingTeamId`, `matchId`, `bowlerId`, `runs`, `extras`, `currentBall`, `isValidBall`, `isNoBall`, `isWide`, `isWicket`, `isRunOut`) VALUES (1, 1, 2, 1, 1, 0, 0, 0.1, 1, 0, 0, 0, 0);
+INSERT INTO `fitsixes`.`bowlingscore` (`ballId`, `bowlingTeamId`, `battingTeamId`, `matchId`, `bowlerId`, `runs`, `extras`, `currentBall`, `isValidBall`, `isNoBall`, `isWide`, `isWicket`, `isRunOut`) VALUES (2, 1, 2, 1, 1, 6, 1, 0.2, 0, 1, 0, 0, 0);
+INSERT INTO `fitsixes`.`bowlingscore` (`ballId`, `bowlingTeamId`, `battingTeamId`, `matchId`, `bowlerId`, `runs`, `extras`, `currentBall`, `isValidBall`, `isNoBall`, `isWide`, `isWicket`, `isRunOut`) VALUES (3, 1, 2, 1, 1, 2, 0, 0.2, 1, 0, 0, 0, 0);
+INSERT INTO `fitsixes`.`bowlingscore` (`ballId`, `bowlingTeamId`, `battingTeamId`, `matchId`, `bowlerId`, `runs`, `extras`, `currentBall`, `isValidBall`, `isNoBall`, `isWide`, `isWicket`, `isRunOut`) VALUES (4, 1, 2, 1, 1, 4, 0, 0.3, 1, 0, 0, 0, 0);
+INSERT INTO `fitsixes`.`bowlingscore` (`ballId`, `bowlingTeamId`, `battingTeamId`, `matchId`, `bowlerId`, `runs`, `extras`, `currentBall`, `isValidBall`, `isNoBall`, `isWide`, `isWicket`, `isRunOut`) VALUES (5, 1, 2, 1, 1, 1, 0, 0.4, 1, 0, 0, 0, 0);
+INSERT INTO `fitsixes`.`bowlingscore` (`ballId`, `bowlingTeamId`, `battingTeamId`, `matchId`, `bowlerId`, `runs`, `extras`, `currentBall`, `isValidBall`, `isNoBall`, `isWide`, `isWicket`, `isRunOut`) VALUES (6, 2, 1, 1, 4, 6, 0, 0.1, 0, 1, 0, 0, 0);
+INSERT INTO `fitsixes`.`bowlingscore` (`ballId`, `bowlingTeamId`, `battingTeamId`, `matchId`, `bowlerId`, `runs`, `extras`, `currentBall`, `isValidBall`, `isNoBall`, `isWide`, `isWicket`, `isRunOut`) VALUES (7, 2, 1, 1, 4, 6, 0, 0.1, 1, 0, 0, 0, 0);
+INSERT INTO `fitsixes`.`bowlingscore` (`ballId`, `bowlingTeamId`, `battingTeamId`, `matchId`, `bowlerId`, `runs`, `extras`, `currentBall`, `isValidBall`, `isNoBall`, `isWide`, `isWicket`, `isRunOut`) VALUES (8, 2, 1, 1, 4, 6, 0, 0.2, 1, 0, 0, 0, 0);
+INSERT INTO `fitsixes`.`bowlingscore` (`ballId`, `bowlingTeamId`, `battingTeamId`, `matchId`, `bowlerId`, `runs`, `extras`, `currentBall`, `isValidBall`, `isNoBall`, `isWide`, `isWicket`, `isRunOut`) VALUES (9, 2, 1, 1, 4, 4, 0, 0.3, 1, 0, 0, 0, 0);
+INSERT INTO `fitsixes`.`bowlingscore` (`ballId`, `bowlingTeamId`, `battingTeamId`, `matchId`, `bowlerId`, `runs`, `extras`, `currentBall`, `isValidBall`, `isNoBall`, `isWide`, `isWicket`, `isRunOut`) VALUES (10, 2, 1, 1, 4, 4, 0, 0.4, 1, 0, 0, 0, 0);
+INSERT INTO `fitsixes`.`bowlingscore` (`ballId`, `bowlingTeamId`, `battingTeamId`, `matchId`, `bowlerId`, `runs`, `extras`, `currentBall`, `isValidBall`, `isNoBall`, `isWide`, `isWicket`, `isRunOut`) VALUES (11, 5, 4, 2, 8, 2, 0, 0.1, 1, 0, 0, 0, 0);
+INSERT INTO `fitsixes`.`bowlingscore` (`ballId`, `bowlingTeamId`, `battingTeamId`, `matchId`, `bowlerId`, `runs`, `extras`, `currentBall`, `isValidBall`, `isNoBall`, `isWide`, `isWicket`, `isRunOut`) VALUES (12, 5, 4, 2, 8, 2, 0, 0.2, 1, 0, 0, 0, 0);
 
 COMMIT;
 
