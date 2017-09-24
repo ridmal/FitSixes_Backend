@@ -62,7 +62,7 @@ controller.addNewBall = function (bowler, batting) {
     const def = Q.defer();
 
 
-    Q.all([bowlerService.getMatchDetails(bowler.matchId), bowlerService.getBowlerByIdWithMatchId(bowler.matchId, bowler.bowlerId)]).then((result) => {
+    Q.all([bowlerService.getMatchByMatchId(bowler.matchId), bowlerService.getBowlerByIdWithMatchId(bowler.matchId, bowler.bowlerId)]).then((result) => {
 
         if (result[0].length == 1) {
 
@@ -274,7 +274,7 @@ controller.startMatch = function (req) {
 controller.undoLastBall = function (req) {
     const def = Q.defer();
 
-    Q.all([bowlerService.undoLastBall(req.body.matchId, req.body.bowlingTeamId), bowlerService.undoBattingTable(req.body.matchId, req.body.battingTeamId), bowlerService.getMatchDetails(req.body.matchId)]).then(
+    Q.all([bowlerService.undoLastBall(req.params.matchId), bowlerService.undoBattingTable(req.params.matchId), bowlerService.getMatchByMatchId(req.params.matchId)]).then(
         (res) => {
 
 
@@ -287,7 +287,7 @@ controller.undoLastBall = function (req) {
                     var match = res[2][0];
 
                     model.currentOver = getCurrentOver(match.currentOvers, match.balls, -1);
-                    bowlerService.undoMatchTable(model.currentOver, req.body.matchId).then(() => {
+                    bowlerService.undoMatchTable(model.currentOver, req.params.matchId).then(() => {
                         def.resolve(model);
                     })
                         .catch((error) => {

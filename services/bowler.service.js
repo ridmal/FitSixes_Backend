@@ -230,7 +230,7 @@ service.setOnLine = function (groundId,matchId){
 
 service.undoLastBall = function (matchId,bowlingTeamId){
     const def = Q.defer();
-    const query = `DELETE FROM bowlingscore WHERE matchId = ${matchId} AND bowlingTeamId = ${bowlingTeamId} ORDER BY ballId DESC LIMIT 1`;
+    const query = `DELETE FROM bowlingscore WHERE matchId = ${matchId} ORDER BY ballId DESC LIMIT 1`;
     databaseService.deleteQuery(query)
         .then((results) => {
             def.resolve(results);
@@ -254,9 +254,9 @@ service.undoMatchTable = function (currentOvers,matchId ){
     return def.promise;
 };
 
-service.undoBattingTable = function (matchId,battingTeamId ){
+service.undoBattingTable = function (matchId){
     const def = Q.defer();
-    const query = `DELETE FROM battingscore WHERE matchId = ${matchId} AND teamId = ${battingTeamId} ORDER BY ballId DESC LIMIT 1`;
+    const query = `DELETE FROM battingscore WHERE matchId = ${matchId} ORDER BY ballId DESC LIMIT 1`;
     databaseService.deleteQuery(query)
         .then((results) => {
             def.resolve(results);
@@ -267,17 +267,5 @@ service.undoBattingTable = function (matchId,battingTeamId ){
     return def.promise;
 };
 
-service.getMatchDetails = function (matchId ){
-    const def = Q.defer();
-    const query = `SELECT * FROM matches WHERE matchId = ${matchId} `;
-    databaseService.selectQuery(query)
-        .then((results) => {
-            def.resolve(results);
-        })
-        .catch((error) => {
-            def.reject(error);
-        });
-    return def.promise;
-};
 
 module.exports = service;

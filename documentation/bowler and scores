@@ -276,9 +276,11 @@ successfully Updated
 
 ----------------------------- Undo Last Ball -----------------------------
 
-http://localhost:3000/api/bowler/undoLastBall
+http://localhost:3000/api/bowler/undoLastBall/1
 
-Type : POST
+Type : GET
+
+1 St Parameter => matchId
 
 Pay Load :
 
