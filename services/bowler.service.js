@@ -209,4 +209,32 @@ service.setOnLine = function (groundId,matchId){
         });
     return def.promise;
 };
+
+service.getLastBall = function (matchId,bowlingTeamId ){
+    const def = Q.defer();
+    const query = `SELECT MAX(b.ballId) AS lastBall FROM bowlingscore b WHERE b.matchId = ${matchId} AND b.bowlingTeamId = ${bowlingTeamId }`;
+    databaseService.selectQuery(query)
+        .then((results) => {
+            def.resolve(results);
+        })
+        .catch((error) => {
+            def.reject(error);
+        });
+    return def.promise;
+};
+
+service.undoLastBall = function (ballId ){
+    const def = Q.defer();
+    const query = `DELETE FROM bowlingscore WHERE ballId = ${ballId}`;
+    databaseService.deleteQuery(query)
+        .then((results) => {
+            def.resolve(results);
+        })
+        .catch((error) => {
+            def.reject(error);
+        });
+    return def.promise;
+};
+
+
 module.exports = service;

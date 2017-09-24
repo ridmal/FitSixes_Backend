@@ -219,3 +219,74 @@ Response :
         "eco": 3
     }
 }
+
+
+----------------------------- Change Inning -----------------------------
+
+http://localhost:3000/api/bowler/changeInning
+
+Type : POST
+
+Pay Load :
+
+{
+	"matchId": 1,
+	"battingTeamId": 1
+}
+
+Response :
+
+successfully Updated
+
+----------------------------- Start Match -----------------------------
+
+http://localhost:3000/api/bowler/endMatch
+
+Type : POST
+
+Pay Load :
+
+{
+"matchId":1,
+"groundId":2
+}
+
+Response :
+
+successfully Updated
+
+----------------------------- End Match -----------------------------
+
+http://localhost:3000/api/bowler/endMatch
+
+Type : POST
+
+Pay Load :
+
+{
+"matchId":4,
+"wonTeamId":10
+}
+
+
+Response :
+
+successfully Updated
+
+----------------------------- Undo Last Ball -----------------------------
+
+http://localhost:3000/api/bowler/undoLastBall
+
+Type : POST
+
+Pay Load :
+
+{
+"matchId": 1,
+"bowlingTeamId": 1
+}
+
+
+Response :
+
+successfully Updated

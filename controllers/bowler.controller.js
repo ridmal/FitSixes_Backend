@@ -277,4 +277,32 @@ controller.startMatch = function (req) {
     return def.promise;
 };
 
+controller.undoLastBall = function (req) {
+    const def = Q.defer();
+
+    bowlerService.getLastBall(req.body.matchId,req.body.bowlingTeamId).then((result) => {
+
+        if (result.length = 1){
+
+            bowlerService.undoLastBall(result[0].lastBall ).then((result) => {
+                def.resolve(result);
+            })
+                .catch((error) => {
+                    def.reject(error);
+                });
+
+        }else{
+            def.resolve({desc:"Invalid attempt"});
+        }
+
+
+
+    })
+        .catch((error) => {
+            def.reject(error);
+        });
+
+    return def.promise;
+};
+
 module.exports = controller;
