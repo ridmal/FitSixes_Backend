@@ -60,91 +60,86 @@ controller.getSummaryByMatchId = function (req) {
 
 controller.addNewBall = function (bowler, batting) {
     const def = Q.defer();
-    let args = {
-        bowlingTeamId: bowler.bowlingTeamId,
-        battingTeamId: bowler.battingTeamId,
-        matchId: bowler.matchId,
-        bowlerId: bowler.bowlerId,
-        runs: bowler.runs,
-        extras: bowler.extras,
-        currentBall: bowler.currentBall,
-        isValidBall: bowler.isValidBall,
-        isNoBall: bowler.isNoBall,
-        isWide: bowler.isWide,
-        isWicket: bowler.isWicket,
-        isRunOut: bowler.isRunOut
-    };
-
-    bowlerService.addNewBall(args).then(() => {
-        let score = {
-            teamId: batting.teamId,
-            matchId: batting.matchId,
-            playerId: batting.playerId,
-            runs: batting.runs,
-            inningId: batting.inningId,
-            isSix: batting.isSix,
-            isFour: batting.isFour,
-            isDot: batting.isDot
-        };
-
-        battingService.addScore(score).then((result) => {
 
 
-            battingService.updateOvers(bowler.over, bowler.matchId).then((result) => {
-                def.resolve(result);
-            })
-                .catch((error) => {
-                    def.reject(error);
-                });
+    Q.all([bowlerService.getMatchDetails(bowler.matchId), bowlerService.getBowlerByIdWithMatchId(bowler.matchId, bowler.bowlerId)]).then((result) => {
 
-            //def.resolve(result);
-        })
-            .catch((error) => {
-                def.reject(error);
+        if (result[0].length == 1) {
+
+            if(result[1][0].lastBall == null)
+                result[1][0].lastBall = 0;
+
+            var matchOver = getCurrentOver(result[0][0].currentOvers, result[0][0].balls, 1);
+            var currentBall = getCurrentOver(parseFloat(result[1][0].lastBall.toFixed(2)), result[0][0].balls, 1);
+
+            let bowling = {
+             bowlingTeamId: bowler.bowlingTeamId,
+             battingTeamId: bowler.battingTeamId,
+             matchId: bowler.matchId,
+             bowlerId: bowler.bowlerId,
+             runs: bowler.runs,
+             extras: bowler.extras,
+             currentBall: currentBall,
+             isValidBall: bowler.isValidBall,
+             isNoBall: bowler.isNoBall,
+             isWide: bowler.isWide,
+             isWicket: bowler.isWicket,
+             isRunOut: bowler.isRunOut
+             };
+
+             let battingModel = {
+             teamId: batting.teamId,
+             matchId: batting.matchId,
+             playerId: batting.playerId,
+             runs: batting.runs,
+             inningId: batting.inningId,
+             isSix: batting.isSix,
+             isFour: batting.isFour,
+             isDot: batting.isDot
+             };
+
+            Q.all([bowlerService.addNewBall(bowling),battingService.addScore(battingModel),battingService.updateOvers(matchOver, bowler.matchId)]).then((result) => {
+
+                var model = {
+                    matchOver: matchOver,
+                    ballerOver: currentBall
+                }
+                def.resolve(model);
+            }).catch((err) => {
+                def.resolve(err);
             });
-
-        //  def.resolve(result);
-    })
-        .catch((error) => {
-            def.reject(error);
-        });
-
+        } else {
+            def.resolve({desc: "Bad request"});
+        }
+    }).catch((err) => {
+        def.resolve(err);
+    });
     return def.promise;
 };
 
 controller.getScore = function (req) {
+
     const def = Q.defer();
-    bowlerService.getScore(req.body.matchId, req.body.playerId).then((result) => {
-        var list = [];
-        var model = {};
-        for (var i = 0; i < result.length; i++) {
-            list.push(result[i].runs)
+
+    Q.all([bowlerService.getScore(req.body.matchId, req.body.playerId), bowlerService.getMatchSummary(req.body.matchId, req.body.teamId), bowlerService.getBowlerByIdWithMatchId(req.body.matchId, req.body.bowlerId)]).then(
+        (result) => {
+
+            var list = [];
+            var model = {};
+            for (var i = 0; i < result[0].length; i++) {
+                list.push(result[0][i].runs)
+            }
+            model.playerScore = list;
+            model.matchResult = result[1][0];
+            model.bowlerResult = result[2][0];
+            model.bowlerResult.lastBall = parseFloat(result[2][0].lastBall.toFixed(2));
+            def.resolve(model);
         }
-        model.playerScore = list;
-        bowlerService.getMatchSummary(req.body.matchId, req.body.teamId).then((result) => {
-
-            model.matchResult = result;
-            bowlerService.getBowlerById(req.body.bowlerId,req.body.matchId).then((result) => {
-
-                model.bowlerResult = result;
-
-                def.resolve(model);
-            })
-                .catch((error) => {
-                    def.reject(error);
-                });
-
-            //def.resolve(model);
-        })
-            .catch((error) => {
-                def.reject(error);
-            });
-
-        //def.resolve(model);
-    })
-        .catch((error) => {
+    ).catch((error) => {
             def.reject(error);
-        });
+        }
+    );
+
     return def.promise;
 };
 
@@ -165,10 +160,10 @@ controller.changeInning = function (req) {
 
     bowlerService.getMatchByMatchId(req.matchId).then((result) => {
 
-        if (result.length == 1){
+        if (result.length == 1) {
 
 
-            if (result[0].inningId == 1 )
+            if (result[0].inningId == 1)
                 result[0].inningId = 0;
             else
                 result[0].inningId = 1;
@@ -188,7 +183,7 @@ controller.changeInning = function (req) {
                     def.reject(error);
                 });
 
-        }else{
+        } else {
             def.resolve("Invalid attempt");
         }
 
@@ -207,13 +202,13 @@ controller.endMatch = function (req) {
 
     bowlerService.getMatchByMatchId(req.body.matchId).then((matchResult) => {
 
-        if (matchResult.length == 1){
+        if (matchResult.length == 1) {
 
 
             //getMatchSummaryByMatchId
             bowlerService.getMatchSummaryByMatchId(req.body.matchId).then((result) => {
 
-                if (result.length == 2){
+                if (result.length == 2) {
 
                     let args = {
                         matchId: req.body.matchId,
@@ -233,7 +228,7 @@ controller.endMatch = function (req) {
                         });
 
 
-                }else{
+                } else {
                     def.resolve("Match is not finished yet");
                 }
 
@@ -245,8 +240,7 @@ controller.endMatch = function (req) {
             return def.promise;
 
 
-
-        }else{
+        } else {
             def.resolve("Invalid attempt");
         }
     })
@@ -262,7 +256,7 @@ controller.startMatch = function (req) {
 
     bowlerService.setOffMatches(req.body.groundId).then(() => {
 
-        bowlerService.setOnLine(req.body.groundId,req.body.matchId).then((result) => {
+        bowlerService.setOnLine(req.body.groundId, req.body.matchId).then((result) => {
             def.resolve(result);
         })
             .catch((error) => {
@@ -280,29 +274,48 @@ controller.startMatch = function (req) {
 controller.undoLastBall = function (req) {
     const def = Q.defer();
 
-    bowlerService.getLastBall(req.body.matchId,req.body.bowlingTeamId).then((result) => {
+    Q.all([bowlerService.undoLastBall(req.body.matchId, req.body.bowlingTeamId), bowlerService.undoBattingTable(req.body.matchId, req.body.battingTeamId), bowlerService.getMatchDetails(req.body.matchId)]).then(
+        (res) => {
 
-        if (result.length = 1){
 
-            bowlerService.undoLastBall(result[0].lastBall ).then((result) => {
-                def.resolve(result);
-            })
-                .catch((error) => {
-                    def.reject(error);
-                });
+            if (res[2].length == 1) {
+                var model = {
+                    bowlingTable: res[0],
+                    battingTable: res[1]
+                }
+                if (res[2][0].currentOvers > 0) {
+                    var match = res[2][0];
 
-        }else{
-            def.resolve({desc:"Invalid attempt"});
+                    model.currentOver = getCurrentOver(match.currentOvers, match.balls, -1);
+                    bowlerService.undoMatchTable(model.currentOver, req.body.matchId).then(() => {
+                        def.resolve(model);
+                    })
+                        .catch((error) => {
+                            def.reject(error);
+                        });
+                } else {
+                    model.currentOver = 0;
+                    def.resolve(model);
+                }
+
+            } else {
+                def.resolve({desc: "Invalid attempt"});
+            }
         }
-
-
-
-    })
-        .catch((error) => {
+    ).catch((error) => {
             def.reject(error);
-        });
-
+        }
+    );
     return def.promise;
 };
+
+function getCurrentOver(currentOvers, ballPerOver, noOfBalls) {
+    currentOvers = currentOvers + "";
+    var split = currentOvers.split(".");
+    if (split.length == 1)
+        split.push(0);
+    var balls = (parseInt(split[0]) * ballPerOver + parseInt(split[1])) + noOfBalls;
+    return parseFloat(parseInt((balls / ballPerOver)) + "." + (balls % ballPerOver));
+}
 
 module.exports = controller;

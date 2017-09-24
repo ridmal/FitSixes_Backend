@@ -131,14 +131,12 @@ Pay Load :
 
 {
   "bowler": {
-    "bowlingTeamId": 5,
-    "battingTeamId": 4,
-    "matchId": 2,
-    "bowlerId": 8,
-    "runs": 6,
+    "bowlingTeamId": 1,
+    "battingTeamId": 2,
+    "matchId": 1,
+    "bowlerId": 1,
+    "runs": 2,
     "extras": 0,
-    "currentBall": 0.3,
-    "over": 0.3,
     "isValidBall": 1,
     "isNoBall": 0,
     "isWide": 0,
@@ -146,12 +144,12 @@ Pay Load :
     "isRunOut":0
   },
   "batting": {
-    "teamId": 4,
+    "teamId": 2,
     "matchId": 2,
-    "playerId": 7,
-    "runs": 6,
-    "inningId": 1,
-    "isSix": 1,
+    "playerId": 6,
+    "runs": 2,
+    "inningId": 2,
+    "isSix": 0,
     "isFour": 0,
     "isDot": 0
   }
@@ -159,7 +157,10 @@ Pay Load :
 
 Response :
 
-Added successfully
+{
+    "matchOver": 2.3,
+    "ballerOver": 0.3
+}
 
 
 ----------------------------- Get Score -----------------------------
@@ -181,7 +182,7 @@ Description :
 
 marchId => Current Match Id
 playerId => Current Batsman Id
-teamId => Bowling Team Id
+teamId => Batting Team Id
 bowlerId => Bowler Id
 
 
@@ -283,10 +284,14 @@ Pay Load :
 
 {
 "matchId": 1,
-"bowlingTeamId": 1
+"bowlingTeamId": 1,
+"battingTeamId":2
 }
-
 
 Response :
 
-successfully Updated
+{
+    "bowlingTable": "successfully removed",
+    "battingTable": "successfully removed",
+    "currentOver": 2.2
+}

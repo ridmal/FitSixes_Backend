@@ -36,6 +36,22 @@ service.getBowlerById = function (id){
 
 };
 
+service.getBowlerByIdWithMatchId = function (matchId,bowlerId){
+
+    const def = Q.defer();
+    const query = `SELECT b.ballId, p.name, t.teamId, t.teamName, t.companyName, SUM(b.runs) AS totalRuns, SUM(b.extras) AS extras, SUM(b.isWide) AS wides, SUM(b.isNoBall) AS noBalls, SUM(b.isWicket) AS wickets, MAX(b.currentBall) AS lastBall, ( SUM(b.runs) / SUM(b.isValidBall) ) AS eco FROM bowlingscore b, players p, teams t WHERE b.matchId = ${matchId} AND b.bowlerId = ${bowlerId} AND b.bowlerId = p.playerId AND p.teamId = t.teamId`;
+    databaseService.selectQuery(query)
+        .then((results) => {
+            def.resolve(results);
+        })
+        .catch((error) => {
+            def.reject(error);
+        });
+
+    return def.promise;
+
+};
+
 /*service.getAllWicketsById = function (id){
  const def = Q.defer();
  const query = `SELECT b.teamId, p.name, p.playerId, SUM(wicket) AS wickets FROM bowlingscore b, players p WHERE bowlerId = ${id} AND b.bowlerId = p.playerId`;
@@ -116,7 +132,7 @@ service.getMatchSummary = function (matchId,teamId){
     return def.promise;
 };
 
-service.getBowlerByIdAndMatchId = function (bowlerId,matchId){
+/*service.getBowlerByIdAndMatchId = function (bowlerId,matchId){
 
     const def = Q.defer();
     const query = `SELECT b.bowlerId, p.name, p.teamId, t.teamName, t.companyName, SUM(b.runs) AS totalRuns, SUM(b.extras) AS extras, SUM(b.isWide) AS wides, SUM(b.isNoBall) AS noBalls, SUM(b.isWicket) AS wickets, MAX(b.currentBall) AS lastBall, ( SUM(b.runs) / SUM(b.isValidBall) ) AS eco FROM bowlingscore b, players p, teams t WHERE b.bowlerId = ${bowlerId} AND b.matchId = ${matchId} AND p.playerId = b.bowlerId AND p.teamId = t.teamId GROUP BY b.bowlerId`;
@@ -130,7 +146,7 @@ service.getBowlerByIdAndMatchId = function (bowlerId,matchId){
 
     return def.promise;
 
-};
+};*/
 
 service.getMatchByGround = function (id,isLive){
     const def = Q.defer();
@@ -210,22 +226,11 @@ service.setOnLine = function (groundId,matchId){
     return def.promise;
 };
 
-service.getLastBall = function (matchId,bowlingTeamId ){
-    const def = Q.defer();
-    const query = `SELECT MAX(b.ballId) AS lastBall FROM bowlingscore b WHERE b.matchId = ${matchId} AND b.bowlingTeamId = ${bowlingTeamId }`;
-    databaseService.selectQuery(query)
-        .then((results) => {
-            def.resolve(results);
-        })
-        .catch((error) => {
-            def.reject(error);
-        });
-    return def.promise;
-};
 
-service.undoLastBall = function (ballId ){
+
+service.undoLastBall = function (matchId,bowlingTeamId){
     const def = Q.defer();
-    const query = `DELETE FROM bowlingscore WHERE ballId = ${ballId}`;
+    const query = `DELETE FROM bowlingscore WHERE matchId = ${matchId} AND bowlingTeamId = ${bowlingTeamId} ORDER BY ballId DESC LIMIT 1`;
     databaseService.deleteQuery(query)
         .then((results) => {
             def.resolve(results);
@@ -236,5 +241,43 @@ service.undoLastBall = function (ballId ){
     return def.promise;
 };
 
+service.undoMatchTable = function (currentOvers,matchId ){
+    const def = Q.defer();
+    const query = `UPDATE matches m SET m.currentOvers = ${currentOvers} WHERE m.matchId = ${matchId} AND m.currentOvers != 0`;
+    databaseService.deleteQuery(query)
+        .then((results) => {
+            def.resolve(results);
+        })
+        .catch((error) => {
+            def.reject(error);
+        });
+    return def.promise;
+};
+
+service.undoBattingTable = function (matchId,battingTeamId ){
+    const def = Q.defer();
+    const query = `DELETE FROM battingscore WHERE matchId = ${matchId} AND teamId = ${battingTeamId} ORDER BY ballId DESC LIMIT 1`;
+    databaseService.deleteQuery(query)
+        .then((results) => {
+            def.resolve(results);
+        })
+        .catch((error) => {
+            def.reject(error);
+        });
+    return def.promise;
+};
+
+service.getMatchDetails = function (matchId ){
+    const def = Q.defer();
+    const query = `SELECT * FROM matches WHERE matchId = ${matchId} `;
+    databaseService.selectQuery(query)
+        .then((results) => {
+            def.resolve(results);
+        })
+        .catch((error) => {
+            def.reject(error);
+        });
+    return def.promise;
+};
 
 module.exports = service;
