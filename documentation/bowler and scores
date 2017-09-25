@@ -295,5 +295,20 @@ Response :
 {
     "bowlingTable": "successfully removed",
     "battingTable": "successfully removed",
-    "currentOver": 2.2
+    "lastBall": {
+        "ballId": 7,
+        "bowlingTeamId": 1,
+        "battingTeamId": 2,
+        "matchId": 1,
+        "bowlerId": 1,
+        "runs": 0,
+        "extras": 0,
+        "currentBall": 0.3,
+        "isValidBall": 1,
+        "isNoBall": 0,
+        "isWide": 0,
+        "isWicket": 1,
+        "isRunOut": 0
+    },
+    "currentOver": 1.3
 }

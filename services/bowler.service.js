@@ -268,4 +268,17 @@ service.undoBattingTable = function (matchId){
 };
 
 
+service.getLastBall = function (matchId) {
+    const def = Q.defer();
+    const query = `SELECT * FROM bowlingscore b WHERE b.matchId = ${matchId} ORDER BY b.ballId DESC LIMIT 2`;
+    databaseService.selectQuery(query)
+        .then((results) => {
+            def.resolve(results);
+        })
+        .catch((error) => {
+            def.reject(error);
+        });
+    return def.promise;
+};
+
 module.exports = service;

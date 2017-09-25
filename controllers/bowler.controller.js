@@ -66,39 +66,44 @@ controller.addNewBall = function (bowler, batting) {
 
         if (result[0].length == 1) {
 
-            if(result[1][0].lastBall == null)
+            if (result[1][0].lastBall == null)
                 result[1][0].lastBall = 0;
 
-            var matchOver = getCurrentOver(result[0][0].currentOvers, result[0][0].balls, 1);
-            var currentBall = getCurrentOver(parseFloat(result[1][0].lastBall.toFixed(2)), result[0][0].balls, 1);
+            if (bowler.isNoBall == 0 && bowler.isWide == 0) {
+                var matchOver = getCurrentOver(result[0][0].currentOvers, result[0][0].balls, 1);
+                var currentBall = getCurrentOver(parseFloat(result[1][0].lastBall.toFixed(2)), result[0][0].balls, 1);
+            } else {
+                var matchOver = result[0][0].currentOvers;
+                var currentBall = parseFloat(result[1][0].lastBall.toFixed(2));
+            }
 
             let bowling = {
-             bowlingTeamId: bowler.bowlingTeamId,
-             battingTeamId: bowler.battingTeamId,
-             matchId: bowler.matchId,
-             bowlerId: bowler.bowlerId,
-             runs: bowler.runs,
-             extras: bowler.extras,
-             currentBall: currentBall,
-             isValidBall: bowler.isValidBall,
-             isNoBall: bowler.isNoBall,
-             isWide: bowler.isWide,
-             isWicket: bowler.isWicket,
-             isRunOut: bowler.isRunOut
-             };
+                bowlingTeamId: bowler.bowlingTeamId,
+                battingTeamId: bowler.battingTeamId,
+                matchId: bowler.matchId,
+                bowlerId: bowler.bowlerId,
+                runs: bowler.runs,
+                extras: bowler.extras,
+                currentBall: currentBall,
+                isValidBall: bowler.isValidBall,
+                isNoBall: bowler.isNoBall,
+                isWide: bowler.isWide,
+                isWicket: bowler.isWicket,
+                isRunOut: bowler.isRunOut
+            };
 
-             let battingModel = {
-             teamId: batting.teamId,
-             matchId: batting.matchId,
-             playerId: batting.playerId,
-             runs: batting.runs,
-             inningId: batting.inningId,
-             isSix: batting.isSix,
-             isFour: batting.isFour,
-             isDot: batting.isDot
-             };
+            let battingModel = {
+                teamId: batting.teamId,
+                matchId: batting.matchId,
+                playerId: batting.playerId,
+                runs: batting.runs,
+                inningId: batting.inningId,
+                isSix: batting.isSix,
+                isFour: batting.isFour,
+                isDot: batting.isDot
+            };
 
-            Q.all([bowlerService.addNewBall(bowling),battingService.addScore(battingModel),battingService.updateOvers(matchOver, bowler.matchId)]).then((result) => {
+            Q.all([bowlerService.addNewBall(bowling), battingService.addScore(battingModel), battingService.updateOvers(matchOver, bowler.matchId)]).then((result) => {
 
                 var model = {
                     matchOver: matchOver,
@@ -274,26 +279,42 @@ controller.startMatch = function (req) {
 controller.undoLastBall = function (req) {
     const def = Q.defer();
 
-    Q.all([bowlerService.undoLastBall(req.params.matchId), bowlerService.undoBattingTable(req.params.matchId), bowlerService.getMatchByMatchId(req.params.matchId)]).then(
+    Q.all([bowlerService.getLastBall(req.params.matchId), bowlerService.undoBattingTable(req.params.matchId), bowlerService.getMatchByMatchId(req.params.matchId), bowlerService.undoLastBall(req.params.matchId)]).then(
         (res) => {
 
 
             if (res[2].length == 1) {
+
+
                 var model = {
-                    bowlingTable: res[0],
+                    bowlingTable: res[3],
                     battingTable: res[1]
                 }
-                if (res[2][0].currentOvers > 0) {
-                    var match = res[2][0];
+                if (res[0].length > 0 ) {
+                    var match = res[2][0]
+                    var lastBall = res[0][0];
 
-                    model.currentOver = getCurrentOver(match.currentOvers, match.balls, -1);
-                    bowlerService.undoMatchTable(model.currentOver, req.params.matchId).then(() => {
+                    if (res[0].length == 2){
+                        model.lastBall = {hasRecord: true};
+                        model.lastBall = res[0][1];
+                    }else{
+                        model.lastBall = {hasRecord: false};
+                    }
+
+                    if (lastBall.isNoBall == 0 && lastBall.isWide == 0) {
+                        model.currentOver = getCurrentOver(match.currentOvers, match.balls, -1);
+                        bowlerService.undoMatchTable(model.currentOver, req.params.matchId).then(() => {
+                            def.resolve(model);
+                        })
+                            .catch((error) => {
+                                def.reject(error);
+                            });
+                    } else {
+                        model.currentOver = match.currentOvers;
                         def.resolve(model);
-                    })
-                        .catch((error) => {
-                            def.reject(error);
-                        });
+                    }
                 } else {
+                    model.lastBall = {hasRecord: false};
                     model.currentOver = 0;
                     def.resolve(model);
                 }
